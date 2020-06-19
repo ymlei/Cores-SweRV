@@ -1,3 +1,13 @@
+# SweRV RISC-V Core<sup>TM</sup> 1.7 from Western Digital
+## Release Notes
+
+* RV_FPGA_OPTIMIZE is now default build option. 
+    * Use  -fpga_optimize=0 to build for lower power (ASIC) flows.
+* Fixed a couple of cases of enable qualification for power reduction
+* Fixes for 4 debug issues reported by Codasip
+
+
+
 # SweRV RISC-V Core<sup>TM</sup> 1.6 from Western Digital
 ## Release Notes
 

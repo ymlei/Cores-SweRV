@@ -1,6 +1,6 @@
-# EH1 SweRV RISC-V Core<sup>TM</sup> 1.6 from Western Digital
+# EH1 SweRV RISC-V Core<sup>TM</sup> 1.7 from Western Digital
 
-This repository contains the SweRV EH1 ver 1.6 Core<sup>TM</sup>  design RTL
+This repository contains the SweRV EH1 ver 1.7 Core<sup>TM</sup>  design RTL
 
 ## License
 
@@ -192,7 +192,12 @@ The `$RV_ROOT/testbench/hex` directory contains precompiled hex files of the tes
 
 
 **Building an FPGA speed optimized model:**  
-Use ``-fpga_optimize=1`` option to ``swerv.config`` to build a model that is removes clock gating logic from flop model so that the FPGA builds can run a higher speeds.
+Use ``-fpga_optimize=1`` option to ``swerv.config`` to build a model that removes clock gating logic from flop model so that the FPGA builds can run a higher speeds. **This is now the default option for
+targets other than ``default_pd``.**
+
+**Building a Power optimized model (ASIC flows):**  
+Use ``-fpga_optimize=0`` option to ``swerv.config`` to build a model that **enables** clock gating logic into the flop model so that the ASIC flows get better power footprint. **This is now the default option for
+target``default_pd``.**
 
 ----
 Western Digital, the Western Digital logo, G-Technology, SanDisk, Tegile, Upthere, WD, SweRV Core, SweRV ISS, 
