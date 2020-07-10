@@ -10,6 +10,9 @@ state machine testbench
 To run tb:
 	`make -f $RV_ROOT/tools/Makefile verilator TEST=("YOUR TESTBENCH NAME")`
 
+To add your testbench file, add it to RV_ROOT/testbench/asm.
+hello_worlk.s and cmark.c are good examples to code in assembly and C language.
+
 ## License
 
 By contributing to this project, you agree that your contribution is governed by [Apache-2.0](LICENSE).  
