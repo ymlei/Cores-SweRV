@@ -3,15 +3,15 @@
 
 This repository contains the SweRV EH1 Core<sup>TM</sup>  design RTL
 
-linked list testbench
-matrix processing testbench
-state machine testbench
+linked list testbench  
+matrix processing testbench  
+state machine testbench  
 
 To run tb:
 	`make -f $RV_ROOT/tools/Makefile verilator TEST=("YOUR TESTBENCH NAME")`
 
-To add your testbench file, add it to RV_ROOT/testbench/asm.
-hello_worlk.s and cmark.c are good examples to code in assembly and C language.
+To add your testbench file, add it to RV_ROOT/testbench/asm  
+hello_worlk.s and cmark.c are good examples to code in assembly and C language  
 
 ## License
 
