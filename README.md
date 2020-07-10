@@ -8,7 +8,7 @@ matrix processing testbench
 state machine testbench
 
 To run tb:
-	make -f $RV_ROOT/tools/Makefile verilator TEST=("YOUR TESTBENCH NAME")
+	`make -f $RV_ROOT/tools/Makefile verilator TEST=("YOUR TESTBENCH NAME")`
 
 ## License
 
