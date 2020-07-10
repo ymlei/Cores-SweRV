@@ -1,6 +1,14 @@
 # EH1 SweRV RISC-V Core<sup>TM</sup> 1.7 from Western Digital
+# Modified to run custom testbench
 
 This repository contains the SweRV EH1 Core<sup>TM</sup>  design RTL
+
+linked list testbench
+matrix processing testbench
+state machine testbench
+
+To run tb:
+	make -f $RV_ROOT/tools/Makefile verilator TEST=("YOUR TESTBENCH NAME")
 
 ## License
 
