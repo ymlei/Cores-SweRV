@@ -4,7 +4,7 @@
 extern int STACK;
 void main();
 
-#define CORE_DEBUG 1
+//#define CORE_DEBUG 1
 #define STDOUT 0xd0580000
 
 __asm (".section .text");
@@ -1473,7 +1473,6 @@ void portable_fini(core_portable *p)
 // Special address. Writing (store byte instruction) to this address
 // causes the simulator to write to the console.
 volatile char __whisper_console_io = 0;
-
 
 static int
 whisperPutc(char c)

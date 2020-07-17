@@ -1,0 +1,5456 @@
+
+print.exe:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0:	5f5552b7          	lui	t0,0x5f555
+       4:	55528293          	addi	t0,t0,1365 # 5f555555 <STACK+0x5f53d4c5>
+       8:	7c029073          	csrw	0x7c0,t0
+       c:	00018117          	auipc	sp,0x18
+      10:	08410113          	addi	sp,sp,132 # 18090 <STACK>
+      14:	2b0020ef          	jal	ra,22c4 <main>
+
+00000018 <_finish>:
+      18:	d05802b7          	lui	t0,0xd0580
+      1c:	0ff00313          	li	t1,255
+      20:	00628023          	sb	t1,0(t0) # d0580000 <STACK+0xd0567f70>
+      24:	fe000ae3          	beqz	zero,18 <_finish>
+      28:	0001                	nop
+      2a:	0001                	nop
+      2c:	0001                	nop
+      2e:	0001                	nop
+      30:	0001                	nop
+      32:	0001                	nop
+      34:	0001                	nop
+      36:	0001                	nop
+      38:	0001                	nop
+      3a:	0001                	nop
+
+0000003c <matrix_test>:
+        4 - Multiply a matrix by a matrix.
+        5 - Add a constant value to all elements of a matrix.
+
+        After the last step, matrix A is back to original contents.
+*/
+void matrix_test(ee_u32 N, MATRES *C, MATDAT *A, MATDAT *B, MATDAT val) {
+      3c:	711d                	addi	sp,sp,-96
+      3e:	ce86                	sw	ra,92(sp)
+      40:	cca2                	sw	s0,88(sp)
+      42:	caa6                	sw	s1,84(sp)
+      44:	c8ca                	sw	s2,80(sp)
+      46:	c6ce                	sw	s3,76(sp)
+      48:	c4d2                	sw	s4,72(sp)
+      4a:	c2d6                	sw	s5,68(sp)
+      4c:	c0da                	sw	s6,64(sp)
+      4e:	de5e                	sw	s7,60(sp)
+      50:	dc62                	sw	s8,56(sp)
+      52:	da66                	sw	s9,52(sp)
+      54:	d86a                	sw	s10,48(sp)
+      56:	d66e                	sw	s11,44(sp)
+      58:	c42e                	sw	a1,8(sp)
+      5a:	c832                	sw	a2,16(sp)
+      5c:	c636                	sw	a3,12(sp)
+
+0000005e <.LBB56>:
+/* Function: matrix_add_const
+        Add a constant value to all elements of a matrix.
+*/
+void matrix_add_const(ee_u32 N, MATDAT *A, MATDAT val) {
+        ee_u32 i,j;
+        for (i=0; i<N; i++) {
+      5e:	42050363          	beqz	a0,484 <.L1>
+      62:	00151413          	slli	s0,a0,0x1
+      66:	8eaa                	mv	t4,a0
+      68:	00860933          	add	s2,a2,s0
+      6c:	40a00533          	neg	a0,a0
+
+00000070 <.LVL2>:
+                for (j=0; j<N; j++) {
+                        A[i*N+j] += val;
+      70:	01071993          	slli	s3,a4,0x10
+      74:	00151813          	slli	a6,a0,0x1
+      78:	85ba                	mv	a1,a4
+
+0000007a <.LVL3>:
+      7a:	0109d993          	srli	s3,s3,0x10
+      7e:	86ca                	mv	a3,s2
+
+00000080 <.LVL4>:
+        for (i=0; i<N; i++) {
+      80:	4a81                	li	s5,0
+      82:	050a                	slli	a0,a0,0x2
+
+00000084 <.L5>:
+                for (j=0; j<N; j++) {
+      84:	00d80633          	add	a2,a6,a3
+      88:	40c68733          	sub	a4,a3,a2
+      8c:	ffe70093          	addi	ra,a4,-2
+      90:	0010d293          	srli	t0,ra,0x1
+      94:	00128313          	addi	t1,t0,1
+      98:	00737393          	andi	t2,t1,7
+
+0000009c <.LBE56>:
+void matrix_test(ee_u32 N, MATRES *C, MATDAT *A, MATDAT *B, MATDAT val) {
+      9c:	87b2                	mv	a5,a2
+      9e:	08038863          	beqz	t2,12e <.L4>
+      a2:	4885                	li	a7,1
+      a4:	07138c63          	beq	t2,a7,11c <.L149>
+      a8:	4489                	li	s1,2
+      aa:	06938263          	beq	t2,s1,10e <.L150>
+      ae:	4a0d                	li	s4,3
+      b0:	05438863          	beq	t2,s4,100 <.L151>
+      b4:	4b11                	li	s6,4
+      b6:	03638e63          	beq	t2,s6,f2 <.L152>
+      ba:	4b95                	li	s7,5
+      bc:	03738463          	beq	t2,s7,e4 <.L153>
+      c0:	4c19                	li	s8,6
+      c2:	01838a63          	beq	t2,s8,d6 <.L154>
+
+000000c6 <.LBB60>:
+                        A[i*N+j] += val;
+      c6:	00065c83          	lhu	s9,0(a2)
+                for (j=0; j<N; j++) {
+      ca:	00260793          	addi	a5,a2,2
+                        A[i*N+j] += val;
+      ce:	01998d33          	add	s10,s3,s9
+      d2:	01a61023          	sh	s10,0(a2)
+
+000000d6 <.L154>:
+      d6:	0007dd83          	lhu	s11,0(a5)
+                for (j=0; j<N; j++) {
+      da:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+      dc:	01b98e33          	add	t3,s3,s11
+      e0:	ffc79f23          	sh	t3,-2(a5)
+
+000000e4 <.L153>:
+      e4:	0007df03          	lhu	t5,0(a5)
+                for (j=0; j<N; j++) {
+      e8:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+      ea:	01e98fb3          	add	t6,s3,t5
+      ee:	fff79f23          	sh	t6,-2(a5)
+
+000000f2 <.L152>:
+      f2:	0007d703          	lhu	a4,0(a5)
+                for (j=0; j<N; j++) {
+      f6:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+      f8:	00e980b3          	add	ra,s3,a4
+      fc:	fe179f23          	sh	ra,-2(a5)
+
+00000100 <.L151>:
+     100:	0007d283          	lhu	t0,0(a5)
+                for (j=0; j<N; j++) {
+     104:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+     106:	00598333          	add	t1,s3,t0
+     10a:	fe679f23          	sh	t1,-2(a5)
+
+0000010e <.L150>:
+     10e:	0007d383          	lhu	t2,0(a5)
+                for (j=0; j<N; j++) {
+     112:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+     114:	007988b3          	add	a7,s3,t2
+     118:	ff179f23          	sh	a7,-2(a5)
+
+0000011c <.L149>:
+     11c:	0007d483          	lhu	s1,0(a5)
+                for (j=0; j<N; j++) {
+     120:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+     122:	00998a33          	add	s4,s3,s1
+     126:	ff479f23          	sh	s4,-2(a5)
+                for (j=0; j<N; j++) {
+     12a:	06f68563          	beq	a3,a5,194 <.L199>
+
+0000012e <.L4>:
+                        A[i*N+j] += val;
+     12e:	0007db03          	lhu	s6,0(a5)
+     132:	0027db83          	lhu	s7,2(a5)
+     136:	0047dc03          	lhu	s8,4(a5)
+     13a:	0067dc83          	lhu	s9,6(a5)
+     13e:	0087dd03          	lhu	s10,8(a5)
+     142:	00a7dd83          	lhu	s11,10(a5)
+     146:	00c7d083          	lhu	ra,12(a5)
+     14a:	00e7d703          	lhu	a4,14(a5)
+     14e:	016983b3          	add	t2,s3,s6
+     152:	017982b3          	add	t0,s3,s7
+     156:	01898fb3          	add	t6,s3,s8
+     15a:	01998f33          	add	t5,s3,s9
+     15e:	01a98e33          	add	t3,s3,s10
+     162:	01b98333          	add	t1,s3,s11
+     166:	001988b3          	add	a7,s3,ra
+     16a:	00e984b3          	add	s1,s3,a4
+     16e:	00779023          	sh	t2,0(a5)
+     172:	00579123          	sh	t0,2(a5)
+     176:	01f79223          	sh	t6,4(a5)
+     17a:	01e79323          	sh	t5,6(a5)
+     17e:	01c79423          	sh	t3,8(a5)
+     182:	00679523          	sh	t1,10(a5)
+     186:	01179623          	sh	a7,12(a5)
+     18a:	00979723          	sh	s1,14(a5)
+                for (j=0; j<N; j++) {
+     18e:	07c1                	addi	a5,a5,16
+     190:	f8f69fe3          	bne	a3,a5,12e <.L4>
+
+00000194 <.L199>:
+        for (i=0; i<N; i++) {
+     194:	001a8493          	addi	s1,s5,1
+
+00000198 <.LVL7>:
+     198:	40a606b3          	sub	a3,a2,a0
+     19c:	309e8363          	beq	t4,s1,4a2 <.L206>
+     1a0:	8aa6                	mv	s5,s1
+     1a2:	b5cd                	j	84 <.L5>
+
+000001a4 <.L14>:
+*/
+void matrix_mul_matrix_bitextract(ee_u32 N, MATRES *C, MATDAT *A, MATDAT *B) {
+        ee_u32 i,j,k;
+        for (i=0; i<N; i++) {
+                for (j=0; j<N; j++) {
+                        C[i*N+j]=0;
+     1a4:	49e2                	lw	s3,24(sp)
+     1a6:	4b72                	lw	s6,28(sp)
+     1a8:	4911                	li	s2,4
+     1aa:	c091                	beqz	s1,1ae <.L20>
+     1ac:	4952                	lw	s2,20(sp)
+
+000001ae <.L20>:
+     1ae:	4bd2                	lw	s7,20(sp)
+     1b0:	4c42                	lw	s8,16(sp)
+     1b2:	4cb2                	lw	s9,12(sp)
+     1b4:	4a81                	li	s5,0
+     1b6:	4a01                	li	s4,0
+
+000001b8 <.L17>:
+     1b8:	864a                	mv	a2,s2
+     1ba:	4581                	li	a1,0
+     1bc:	855a                	mv	a0,s6
+     1be:	0f0020ef          	jal	ra,22ae <memset>
+
+000001c2 <.LVL10>:
+     1c2:	001a9e93          	slli	t4,s5,0x1
+     1c6:	9ee2                	add	t4,t4,s8
+     1c8:	88e6                	mv	a7,s9
+     1ca:	8e5a                	mv	t3,s6
+                for (j=0; j<N; j++) {
+     1cc:	4301                	li	t1,0
+
+000001ce <.L16>:
+                        for(k=0;k<N;k++)
+                        {
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     1ce:	000e9603          	lh	a2,0(t4)
+     1d2:	00089f83          	lh	t6,0(a7)
+     1d6:	fff48593          	addi	a1,s1,-1
+
+000001da <.LBE63>:
+                        for(k=0;k<N;k++)
+     1da:	4805                	li	a6,1
+
+000001dc <.LBB64>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     1dc:	03f600b3          	mul	ra,a2,t6
+     1e0:	0035fd93          	andi	s11,a1,3
+
+000001e4 <.LBE64>:
+                        for(k=0;k<N;k++)
+     1e4:	002e8513          	addi	a0,t4,2
+     1e8:	00888633          	add	a2,a7,s0
+
+000001ec <.LBB65>:
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+     1ec:	4020d793          	srai	a5,ra,0x2
+     1f0:	4050d293          	srai	t0,ra,0x5
+     1f4:	00f7f393          	andi	t2,a5,15
+     1f8:	07f2f713          	andi	a4,t0,127
+     1fc:	02e38fb3          	mul	t6,t2,a4
+
+00000200 <.LBE65>:
+                        for(k=0;k<N;k++)
+     200:	12987a63          	bgeu	a6,s1,334 <.L194>
+     204:	080d8663          	beqz	s11,290 <.L15>
+     208:	050d8e63          	beq	s11,a6,264 <.L181>
+     20c:	4d09                	li	s10,2
+     20e:	03ad8763          	beq	s11,s10,23c <.L182>
+
+00000212 <.LBB66>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     212:	00061683          	lh	a3,0(a2)
+     216:	002e9f03          	lh	t5,2(t4)
+
+0000021a <.LBE66>:
+                        for(k=0;k<N;k++)
+     21a:	4809                	li	a6,2
+     21c:	004e8513          	addi	a0,t4,4
+
+00000220 <.LBB67>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     220:	02df05b3          	mul	a1,t5,a3
+
+00000224 <.LBE67>:
+                        for(k=0;k<N;k++)
+     224:	9622                	add	a2,a2,s0
+
+00000226 <.LBB68>:
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+     226:	4025d093          	srai	ra,a1,0x2
+     22a:	4055dd93          	srai	s11,a1,0x5
+     22e:	00f0f293          	andi	t0,ra,15
+     232:	07fdf793          	andi	a5,s11,127
+     236:	02f283b3          	mul	t2,t0,a5
+     23a:	9f9e                	add	t6,t6,t2
+
+0000023c <.L182>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     23c:	00051d03          	lh	s10,0(a0)
+     240:	00061703          	lh	a4,0(a2)
+
+00000244 <.LBE69>:
+                        for(k=0;k<N;k++)
+     244:	0805                	addi	a6,a6,1
+     246:	0509                	addi	a0,a0,2
+
+00000248 <.LBB70>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     248:	02ed06b3          	mul	a3,s10,a4
+
+0000024c <.LBE70>:
+                        for(k=0;k<N;k++)
+     24c:	9622                	add	a2,a2,s0
+
+0000024e <.LBB71>:
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+     24e:	4026df13          	srai	t5,a3,0x2
+     252:	4056d593          	srai	a1,a3,0x5
+     256:	00ff7093          	andi	ra,t5,15
+     25a:	07f5fd93          	andi	s11,a1,127
+     25e:	03b082b3          	mul	t0,ra,s11
+     262:	9f96                	add	t6,t6,t0
+
+00000264 <.L181>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     264:	00051783          	lh	a5,0(a0)
+     268:	00061383          	lh	t2,0(a2)
+
+0000026c <.LBE72>:
+                        for(k=0;k<N;k++)
+     26c:	0805                	addi	a6,a6,1
+     26e:	0509                	addi	a0,a0,2
+
+00000270 <.LBB73>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     270:	02778d33          	mul	s10,a5,t2
+
+00000274 <.LBE73>:
+                        for(k=0;k<N;k++)
+     274:	9622                	add	a2,a2,s0
+
+00000276 <.LBB74>:
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+     276:	402d5713          	srai	a4,s10,0x2
+     27a:	405d5693          	srai	a3,s10,0x5
+     27e:	00f77f13          	andi	t5,a4,15
+     282:	07f6f593          	andi	a1,a3,127
+     286:	02bf00b3          	mul	ra,t5,a1
+     28a:	9f86                	add	t6,t6,ra
+
+0000028c <.LBE74>:
+                        for(k=0;k<N;k++)
+     28c:	0a987463          	bgeu	a6,s1,334 <.L194>
+
+00000290 <.L15>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     290:	00051383          	lh	t2,0(a0)
+     294:	00061703          	lh	a4,0(a2)
+
+00000298 <.LBE75>:
+                        for(k=0;k<N;k++)
+     298:	00860db3          	add	s11,a2,s0
+     29c:	008d87b3          	add	a5,s11,s0
+
+000002a0 <.LBB76>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     2a0:	02e385b3          	mul	a1,t2,a4
+     2a4:	00251683          	lh	a3,2(a0)
+     2a8:	000d9283          	lh	t0,0(s11)
+     2ac:	00451d03          	lh	s10,4(a0)
+     2b0:	00079f03          	lh	t5,0(a5)
+
+000002b4 <.LBE76>:
+                        for(k=0;k<N;k++)
+     2b4:	00878633          	add	a2,a5,s0
+
+000002b8 <.LBB77>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     2b8:	00061d83          	lh	s11,0(a2)
+     2bc:	00651083          	lh	ra,6(a0)
+
+000002c0 <.LBE77>:
+                        for(k=0;k<N;k++)
+     2c0:	0811                	addi	a6,a6,4
+     2c2:	0521                	addi	a0,a0,8
+
+000002c4 <.LBB78>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     2c4:	025683b3          	mul	t2,a3,t0
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+     2c8:	4055d713          	srai	a4,a1,0x5
+     2cc:	4025d693          	srai	a3,a1,0x2
+     2d0:	00f6f293          	andi	t0,a3,15
+     2d4:	07f77713          	andi	a4,a4,127
+
+000002d8 <.LBE78>:
+                        for(k=0;k<N;k++)
+     2d8:	9622                	add	a2,a2,s0
+
+000002da <.LBB79>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     2da:	03ed05b3          	mul	a1,s10,t5
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+     2de:	4023d793          	srai	a5,t2,0x2
+     2e2:	4053df13          	srai	t5,t2,0x5
+     2e6:	00f7fd13          	andi	s10,a5,15
+     2ea:	07ff7f13          	andi	t5,t5,127
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     2ee:	03b080b3          	mul	ra,ra,s11
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+     2f2:	4055d693          	srai	a3,a1,0x5
+     2f6:	4025dd93          	srai	s11,a1,0x2
+     2fa:	00fdf393          	andi	t2,s11,15
+     2fe:	07f6f593          	andi	a1,a3,127
+     302:	02e28733          	mul	a4,t0,a4
+     306:	4050d793          	srai	a5,ra,0x5
+     30a:	4020d293          	srai	t0,ra,0x2
+     30e:	00f2f093          	andi	ra,t0,15
+     312:	07f7fd93          	andi	s11,a5,127
+     316:	03ed0d33          	mul	s10,s10,t5
+     31a:	9fba                	add	t6,t6,a4
+
+0000031c <.LBB80>:
+     31c:	02b38f33          	mul	t5,t2,a1
+     320:	01af83b3          	add	t2,t6,s10
+
+00000324 <.LBB81>:
+     324:	03b086b3          	mul	a3,ra,s11
+     328:	01e385b3          	add	a1,t2,t5
+
+0000032c <.LBB82>:
+     32c:	00d58fb3          	add	t6,a1,a3
+
+00000330 <.LBE82>:
+                        for(k=0;k<N;k++)
+     330:	f69860e3          	bltu	a6,s1,290 <.L15>
+
+00000334 <.L194>:
+     334:	01fe2023          	sw	t6,0(t3)
+                for (j=0; j<N; j++) {
+     338:	0305                	addi	t1,t1,1
+     33a:	0e11                	addi	t3,t3,4
+     33c:	0889                	addi	a7,a7,2
+
+0000033e <.LVL16>:
+     33e:	e89368e3          	bltu	t1,s1,1ce <.L16>
+        for (i=0; i<N; i++) {
+     342:	0a05                	addi	s4,s4,1
+     344:	9b5e                	add	s6,s6,s7
+     346:	9aa6                	add	s5,s5,s1
+     348:	e69a68e3          	bltu	s4,s1,1b8 <.L17>
+     34c:	4ec2                	lw	t4,16(sp)
+
+0000034e <.LVL18>:
+     34e:	4301                	li	t1,0
+
+00000350 <.LVL19>:
+     350:	4e01                	li	t3,0
+
+00000352 <.L18>:
+                for (j=0; j<N; j++) {
+     352:	00131413          	slli	s0,t1,0x1
+     356:	008e8b33          	add	s6,t4,s0
+                        A[i*N+j] += val;
+     35a:	000b5903          	lhu	s2,0(s6)
+     35e:	fff48a93          	addi	s5,s1,-1
+                for (j=0; j<N; j++) {
+     362:	4705                	li	a4,1
+                        A[i*N+j] += val;
+     364:	41390a33          	sub	s4,s2,s3
+     368:	014b1023          	sh	s4,0(s6)
+     36c:	007afb93          	andi	s7,s5,7
+
+00000370 <.LVL21>:
+                for (j=0; j<N; j++) {
+     370:	002b0793          	addi	a5,s6,2
+     374:	10977463          	bgeu	a4,s1,47c <.L195>
+     378:	080b8e63          	beqz	s7,414 <.L21>
+     37c:	08eb8263          	beq	s7,a4,400 <.L175>
+     380:	4c09                	li	s8,2
+     382:	078b8763          	beq	s7,s8,3f0 <.L176>
+     386:	4c8d                	li	s9,3
+     388:	059b8c63          	beq	s7,s9,3e0 <.L177>
+     38c:	4891                	li	a7,4
+     38e:	051b8163          	beq	s7,a7,3d0 <.L178>
+     392:	4815                	li	a6,5
+     394:	030b8663          	beq	s7,a6,3c0 <.L179>
+     398:	4519                	li	a0,6
+     39a:	00ab8b63          	beq	s7,a0,3b0 <.L180>
+                        A[i*N+j] += val;
+     39e:	002b5603          	lhu	a2,2(s6)
+                for (j=0; j<N; j++) {
+     3a2:	4709                	li	a4,2
+     3a4:	004b0793          	addi	a5,s6,4
+                        A[i*N+j] += val;
+     3a8:	413602b3          	sub	t0,a2,s3
+     3ac:	005b1123          	sh	t0,2(s6)
+
+000003b0 <.L180>:
+     3b0:	0007d083          	lhu	ra,0(a5)
+                for (j=0; j<N; j++) {
+     3b4:	0705                	addi	a4,a4,1
+     3b6:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+     3b8:	41308db3          	sub	s11,ra,s3
+     3bc:	ffb79f23          	sh	s11,-2(a5)
+
+000003c0 <.L179>:
+     3c0:	0007dd03          	lhu	s10,0(a5)
+                for (j=0; j<N; j++) {
+     3c4:	0705                	addi	a4,a4,1
+     3c6:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+     3c8:	413d0fb3          	sub	t6,s10,s3
+     3cc:	fff79f23          	sh	t6,-2(a5)
+
+000003d0 <.L178>:
+     3d0:	0007df03          	lhu	t5,0(a5)
+                for (j=0; j<N; j++) {
+     3d4:	0705                	addi	a4,a4,1
+     3d6:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+     3d8:	413f03b3          	sub	t2,t5,s3
+     3dc:	fe779f23          	sh	t2,-2(a5)
+
+000003e0 <.L177>:
+     3e0:	0007d683          	lhu	a3,0(a5)
+                for (j=0; j<N; j++) {
+     3e4:	0705                	addi	a4,a4,1
+     3e6:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+     3e8:	413685b3          	sub	a1,a3,s3
+     3ec:	feb79f23          	sh	a1,-2(a5)
+
+000003f0 <.L176>:
+     3f0:	0007d403          	lhu	s0,0(a5)
+                for (j=0; j<N; j++) {
+     3f4:	0705                	addi	a4,a4,1
+     3f6:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+     3f8:	41340b33          	sub	s6,s0,s3
+     3fc:	ff679f23          	sh	s6,-2(a5)
+
+00000400 <.L175>:
+     400:	0007d903          	lhu	s2,0(a5)
+                for (j=0; j<N; j++) {
+     404:	0789                	addi	a5,a5,2
+     406:	0705                	addi	a4,a4,1
+                        A[i*N+j] += val;
+     408:	41390ab3          	sub	s5,s2,s3
+     40c:	ff579f23          	sh	s5,-2(a5)
+                for (j=0; j<N; j++) {
+     410:	06977663          	bgeu	a4,s1,47c <.L195>
+
+00000414 <.L21>:
+                        A[i*N+j] += val;
+     414:	0007da03          	lhu	s4,0(a5)
+     418:	0027db83          	lhu	s7,2(a5)
+     41c:	0047dc03          	lhu	s8,4(a5)
+     420:	0067dc83          	lhu	s9,6(a5)
+     424:	0087d503          	lhu	a0,8(a5)
+     428:	00a7d283          	lhu	t0,10(a5)
+     42c:	00c7d603          	lhu	a2,12(a5)
+     430:	00e7d083          	lhu	ra,14(a5)
+     434:	413a0db3          	sub	s11,s4,s3
+     438:	413b8d33          	sub	s10,s7,s3
+     43c:	413c08b3          	sub	a7,s8,s3
+     440:	413c8833          	sub	a6,s9,s3
+     444:	41350fb3          	sub	t6,a0,s3
+     448:	41328f33          	sub	t5,t0,s3
+     44c:	413603b3          	sub	t2,a2,s3
+     450:	413086b3          	sub	a3,ra,s3
+     454:	01b79023          	sh	s11,0(a5)
+     458:	01a79123          	sh	s10,2(a5)
+     45c:	01179223          	sh	a7,4(a5)
+     460:	01079323          	sh	a6,6(a5)
+     464:	01f79423          	sh	t6,8(a5)
+     468:	01e79523          	sh	t5,10(a5)
+     46c:	00779623          	sh	t2,12(a5)
+     470:	00d79723          	sh	a3,14(a5)
+
+00000474 <.LVL23>:
+                for (j=0; j<N; j++) {
+     474:	0721                	addi	a4,a4,8
+
+00000476 <.LVL24>:
+     476:	07c1                	addi	a5,a5,16
+     478:	f8976ee3          	bltu	a4,s1,414 <.L21>
+
+0000047c <.L195>:
+        for (i=0; i<N; i++) {
+     47c:	0e05                	addi	t3,t3,1
+     47e:	9326                	add	t1,t1,s1
+     480:	ec9e69e3          	bltu	t3,s1,352 <.L18>
+
+00000484 <.L1>:
+}
+     484:	40f6                	lw	ra,92(sp)
+     486:	4466                	lw	s0,88(sp)
+     488:	44d6                	lw	s1,84(sp)
+     48a:	4946                	lw	s2,80(sp)
+     48c:	49b6                	lw	s3,76(sp)
+     48e:	4a26                	lw	s4,72(sp)
+     490:	4a96                	lw	s5,68(sp)
+     492:	4b06                	lw	s6,64(sp)
+     494:	5bf2                	lw	s7,60(sp)
+     496:	5c62                	lw	s8,56(sp)
+     498:	5cd2                	lw	s9,52(sp)
+     49a:	5d42                	lw	s10,48(sp)
+     49c:	5db2                	lw	s11,44(sp)
+     49e:	6125                	addi	sp,sp,96
+
+000004a0 <.LVL28>:
+     4a0:	8082                	ret
+
+000004a2 <.L206>:
+     4a2:	4fa2                	lw	t6,8(sp)
+
+000004a4 <.LBB85>:
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     4a4:	864a                	mv	a2,s2
+     4a6:	4e01                	li	t3,0
+     4a8:	4e81                	li	t4,0
+
+000004aa <.L6>:
+                for (j=0; j<N; j++) {
+     4aa:	00c80c33          	add	s8,a6,a2
+     4ae:	418607b3          	sub	a5,a2,s8
+     4b2:	ffe78a13          	addi	s4,a5,-2
+     4b6:	001a5b13          	srli	s6,s4,0x1
+     4ba:	001b0b93          	addi	s7,s6,1
+     4be:	002e1c93          	slli	s9,t3,0x2
+     4c2:	007bfd13          	andi	s10,s7,7
+     4c6:	8b7e                	mv	s6,t6
+     4c8:	01fc87b3          	add	a5,s9,t6
+
+000004cc <.LBB88>:
+     4cc:	8762                	mv	a4,s8
+     4ce:	080d0f63          	beqz	s10,56c <.L7>
+     4d2:	4d85                	li	s11,1
+     4d4:	09bd0263          	beq	s10,s11,558 <.L155>
+     4d8:	4089                	li	ra,2
+     4da:	061d0763          	beq	s10,ra,548 <.L156>
+     4de:	438d                	li	t2,3
+     4e0:	047d0c63          	beq	s10,t2,538 <.L157>
+     4e4:	4291                	li	t0,4
+     4e6:	045d0163          	beq	s10,t0,528 <.L158>
+     4ea:	4f15                	li	t5,5
+     4ec:	03ed0663          	beq	s10,t5,518 <.L159>
+     4f0:	4319                	li	t1,6
+     4f2:	006d0b63          	beq	s10,t1,508 <.L160>
+
+000004f6 <.LBB89>:
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     4f6:	000c1883          	lh	a7,0(s8)
+                for (j=0; j<N; j++) {
+     4fa:	002c0713          	addi	a4,s8,2
+     4fe:	0791                	addi	a5,a5,4
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     500:	02b886b3          	mul	a3,a7,a1
+     504:	fed7ae23          	sw	a3,-4(a5)
+
+00000508 <.L160>:
+     508:	00071a03          	lh	s4,0(a4)
+                for (j=0; j<N; j++) {
+     50c:	0791                	addi	a5,a5,4
+     50e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     510:	02ba0bb3          	mul	s7,s4,a1
+     514:	ff77ae23          	sw	s7,-4(a5)
+
+00000518 <.L159>:
+     518:	00071c83          	lh	s9,0(a4)
+                for (j=0; j<N; j++) {
+     51c:	0791                	addi	a5,a5,4
+     51e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     520:	02bc8d33          	mul	s10,s9,a1
+     524:	ffa7ae23          	sw	s10,-4(a5)
+
+00000528 <.L158>:
+     528:	00071d83          	lh	s11,0(a4)
+                for (j=0; j<N; j++) {
+     52c:	0791                	addi	a5,a5,4
+     52e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     530:	02bd80b3          	mul	ra,s11,a1
+     534:	fe17ae23          	sw	ra,-4(a5)
+
+00000538 <.L157>:
+     538:	00071383          	lh	t2,0(a4)
+                for (j=0; j<N; j++) {
+     53c:	0791                	addi	a5,a5,4
+     53e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     540:	02b382b3          	mul	t0,t2,a1
+     544:	fe57ae23          	sw	t0,-4(a5)
+
+00000548 <.L156>:
+     548:	00071f03          	lh	t5,0(a4)
+                for (j=0; j<N; j++) {
+     54c:	0791                	addi	a5,a5,4
+     54e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     550:	02bf0333          	mul	t1,t5,a1
+     554:	fe67ae23          	sw	t1,-4(a5)
+
+00000558 <.L155>:
+     558:	00071883          	lh	a7,0(a4)
+                for (j=0; j<N; j++) {
+     55c:	0791                	addi	a5,a5,4
+     55e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     560:	02b886b3          	mul	a3,a7,a1
+     564:	fed7ae23          	sw	a3,-4(a5)
+                for (j=0; j<N; j++) {
+     568:	06e60763          	beq	a2,a4,5d6 <.L198>
+
+0000056c <.L7>:
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     56c:	00071b83          	lh	s7,0(a4)
+     570:	00271a03          	lh	s4,2(a4)
+     574:	00471c83          	lh	s9,4(a4)
+     578:	00671d03          	lh	s10,6(a4)
+     57c:	00871d83          	lh	s11,8(a4)
+     580:	00a71f03          	lh	t5,10(a4)
+     584:	00c71303          	lh	t1,12(a4)
+     588:	00e71883          	lh	a7,14(a4)
+     58c:	02bb80b3          	mul	ra,s7,a1
+                for (j=0; j<N; j++) {
+     590:	0741                	addi	a4,a4,16
+     592:	02078793          	addi	a5,a5,32
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+     596:	02ba03b3          	mul	t2,s4,a1
+     59a:	fe17a023          	sw	ra,-32(a5)
+     59e:	02bc82b3          	mul	t0,s9,a1
+     5a2:	fe77a223          	sw	t2,-28(a5)
+     5a6:	02bd06b3          	mul	a3,s10,a1
+     5aa:	fe57a423          	sw	t0,-24(a5)
+     5ae:	02bd8bb3          	mul	s7,s11,a1
+     5b2:	fed7a623          	sw	a3,-20(a5)
+     5b6:	02bf0a33          	mul	s4,t5,a1
+     5ba:	ff77a823          	sw	s7,-16(a5)
+     5be:	02b30cb3          	mul	s9,t1,a1
+     5c2:	ff47aa23          	sw	s4,-12(a5)
+     5c6:	02b88d33          	mul	s10,a7,a1
+     5ca:	ff97ac23          	sw	s9,-8(a5)
+     5ce:	ffa7ae23          	sw	s10,-4(a5)
+                for (j=0; j<N; j++) {
+     5d2:	f8e61de3          	bne	a2,a4,56c <.L7>
+
+000005d6 <.L198>:
+        for (i=0; i<N; i++) {
+     5d6:	001e8713          	addi	a4,t4,1
+
+000005da <.LVL32>:
+     5da:	9e26                	add	t3,t3,s1
+     5dc:	40ac0633          	sub	a2,s8,a0
+     5e0:	01da8463          	beq	s5,t4,5e8 <.L8>
+     5e4:	8eba                	mv	t4,a4
+     5e6:	b5d1                	j	4aa <.L6>
+
+000005e8 <.L8>:
+                C[i]=0;
+     5e8:	4da2                	lw	s11,8(sp)
+     5ea:	00249c13          	slli	s8,s1,0x2
+     5ee:	4581                	li	a1,0
+     5f0:	856e                	mv	a0,s11
+     5f2:	8662                	mv	a2,s8
+     5f4:	ca62                	sw	s8,20(sp)
+     5f6:	4b9010ef          	jal	ra,22ae <memset>
+
+000005fa <.LVL33>:
+     5fa:	43b2                	lw	t2,12(sp)
+     5fc:	4d42                	lw	s10,16(sp)
+     5fe:	85ee                	mv	a1,s11
+     600:	008382b3          	add	t0,t2,s0
+     604:	9de2                	add	s11,s11,s8
+     606:	4f81                	li	t6,0
+     608:	cc56                	sw	s5,24(sp)
+     60a:	ce22                	sw	s0,28(sp)
+
+0000060c <.L10>:
+                for (j=0; j<N; j++) {
+     60c:	40728eb3          	sub	t4,t0,t2
+     610:	ffee8793          	addi	a5,t4,-2
+     614:	0017d413          	srli	s0,a5,0x1
+     618:	00140513          	addi	a0,s0,1
+     61c:	001f9813          	slli	a6,t6,0x1
+     620:	00757a93          	andi	s5,a0,7
+     624:	010d06b3          	add	a3,s10,a6
+                C[i]=0;
+     628:	861e                	mv	a2,t2
+     62a:	4781                	li	a5,0
+     62c:	0a0a8563          	beqz	s5,6d6 <.L9>
+     630:	4f05                	li	t5,1
+     632:	09ea8763          	beq	s5,t5,6c0 <.L161>
+     636:	4309                	li	t1,2
+     638:	066a8b63          	beq	s5,t1,6ae <.L162>
+     63c:	488d                	li	a7,3
+     63e:	051a8f63          	beq	s5,a7,69c <.L163>
+     642:	4091                	li	ra,4
+     644:	041a8363          	beq	s5,ra,68a <.L164>
+     648:	4b95                	li	s7,5
+     64a:	037a8763          	beq	s5,s7,678 <.L165>
+     64e:	4a19                	li	s4,6
+     650:	014a8b63          	beq	s5,s4,666 <.L166>
+
+00000654 <.LVL35>:
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     654:	00069c83          	lh	s9,0(a3)
+     658:	00039703          	lh	a4,0(t2)
+                for (j=0; j<N; j++) {
+     65c:	0689                	addi	a3,a3,2
+     65e:	00238613          	addi	a2,t2,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     662:	02ec87b3          	mul	a5,s9,a4
+
+00000666 <.L166>:
+     666:	00069e03          	lh	t3,0(a3)
+     66a:	00061c03          	lh	s8,0(a2)
+                for (j=0; j<N; j++) {
+     66e:	0689                	addi	a3,a3,2
+     670:	0609                	addi	a2,a2,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     672:	038e0eb3          	mul	t4,t3,s8
+     676:	97f6                	add	a5,a5,t4
+
+00000678 <.L165>:
+     678:	00069403          	lh	s0,0(a3)
+     67c:	00061503          	lh	a0,0(a2)
+                for (j=0; j<N; j++) {
+     680:	0689                	addi	a3,a3,2
+     682:	0609                	addi	a2,a2,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     684:	02a40833          	mul	a6,s0,a0
+     688:	97c2                	add	a5,a5,a6
+
+0000068a <.L164>:
+     68a:	00069a83          	lh	s5,0(a3)
+     68e:	00061f03          	lh	t5,0(a2)
+                for (j=0; j<N; j++) {
+     692:	0689                	addi	a3,a3,2
+     694:	0609                	addi	a2,a2,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     696:	03ea8333          	mul	t1,s5,t5
+     69a:	979a                	add	a5,a5,t1
+
+0000069c <.L163>:
+     69c:	00069883          	lh	a7,0(a3)
+     6a0:	00061083          	lh	ra,0(a2)
+                for (j=0; j<N; j++) {
+     6a4:	0689                	addi	a3,a3,2
+     6a6:	0609                	addi	a2,a2,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     6a8:	02188bb3          	mul	s7,a7,ra
+     6ac:	97de                	add	a5,a5,s7
+
+000006ae <.L162>:
+     6ae:	00069a03          	lh	s4,0(a3)
+     6b2:	00061c83          	lh	s9,0(a2)
+                for (j=0; j<N; j++) {
+     6b6:	0689                	addi	a3,a3,2
+     6b8:	0609                	addi	a2,a2,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     6ba:	039a0733          	mul	a4,s4,s9
+     6be:	97ba                	add	a5,a5,a4
+
+000006c0 <.L161>:
+     6c0:	00069e03          	lh	t3,0(a3)
+     6c4:	00061c03          	lh	s8,0(a2)
+                for (j=0; j<N; j++) {
+     6c8:	0609                	addi	a2,a2,2
+     6ca:	0689                	addi	a3,a3,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     6cc:	038e0eb3          	mul	t4,t3,s8
+     6d0:	97f6                	add	a5,a5,t4
+                for (j=0; j<N; j++) {
+     6d2:	08c28563          	beq	t0,a2,75c <.L197>
+
+000006d6 <.L9>:
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     6d6:	00069403          	lh	s0,0(a3)
+     6da:	00061503          	lh	a0,0(a2)
+     6de:	00261a83          	lh	s5,2(a2)
+     6e2:	00269c83          	lh	s9,2(a3)
+     6e6:	02a40733          	mul	a4,s0,a0
+     6ea:	00469083          	lh	ra,4(a3)
+     6ee:	00461c03          	lh	s8,4(a2)
+     6f2:	00669e83          	lh	t4,6(a3)
+     6f6:	00661b83          	lh	s7,6(a2)
+     6fa:	00869303          	lh	t1,8(a3)
+     6fe:	00861a03          	lh	s4,8(a2)
+     702:	00a69883          	lh	a7,10(a3)
+     706:	00a61403          	lh	s0,10(a2)
+     70a:	00c69803          	lh	a6,12(a3)
+     70e:	035c8cb3          	mul	s9,s9,s5
+     712:	00c61f03          	lh	t5,12(a2)
+     716:	00e69503          	lh	a0,14(a3)
+     71a:	00e61e03          	lh	t3,14(a2)
+     71e:	97ba                	add	a5,a5,a4
+                for (j=0; j<N; j++) {
+     720:	0641                	addi	a2,a2,16
+     722:	06c1                	addi	a3,a3,16
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+     724:	03808ab3          	mul	s5,ra,s8
+     728:	019780b3          	add	ra,a5,s9
+     72c:	037e8c33          	mul	s8,t4,s7
+     730:	01508eb3          	add	t4,ra,s5
+     734:	03430bb3          	mul	s7,t1,s4
+     738:	018e8333          	add	t1,t4,s8
+     73c:	02888733          	mul	a4,a7,s0
+     740:	01730a33          	add	s4,t1,s7
+     744:	03e808b3          	mul	a7,a6,t5
+     748:	00ea0433          	add	s0,s4,a4
+     74c:	03c50833          	mul	a6,a0,t3
+     750:	01140f33          	add	t5,s0,a7
+     754:	010f07b3          	add	a5,t5,a6
+                for (j=0; j<N; j++) {
+     758:	f6c29fe3          	bne	t0,a2,6d6 <.L9>
+
+0000075c <.L197>:
+     75c:	c19c                	sw	a5,0(a1)
+        for (i=0; i<N; i++) {
+     75e:	0591                	addi	a1,a1,4
+     760:	9fa6                	add	t6,t6,s1
+     762:	eabd95e3          	bne	s11,a1,60c <.L10>
+     766:	4ae2                	lw	s5,24(sp)
+     768:	4a42                	lw	s4,16(sp)
+     76a:	cc4e                	sw	s3,24(sp)
+     76c:	49d2                	lw	s3,20(sp)
+     76e:	4d81                	li	s11,0
+     770:	4472                	lw	s0,28(sp)
+     772:	4b81                	li	s7,0
+     774:	ce5a                	sw	s6,28(sp)
+     776:	8b6e                	mv	s6,s11
+
+00000778 <.L11>:
+                for (j=0; j<N; j++) {
+     778:	42a2                	lw	t0,8(sp)
+     77a:	002b9393          	slli	t2,s7,0x2
+                        C[i*N+j]=0;
+     77e:	864e                	mv	a2,s3
+     780:	00728533          	add	a0,t0,t2
+     784:	4581                	li	a1,0
+     786:	329010ef          	jal	ra,22ae <memset>
+
+0000078a <.LVL37>:
+     78a:	4eb2                	lw	t4,12(sp)
+     78c:	8f2a                	mv	t5,a0
+                for (j=0; j<N; j++) {
+     78e:	4f81                	li	t6,0
+
+00000790 <.L13>:
+                        for(k=0;k<N;k++)
+     790:	41490d33          	sub	s10,s2,s4
+     794:	ffed0613          	addi	a2,s10,-2
+     798:	00165693          	srli	a3,a2,0x1
+     79c:	00168e13          	addi	t3,a3,1
+     7a0:	007e7c93          	andi	s9,t3,7
+     7a4:	8676                	mv	a2,t4
+     7a6:	86d2                	mv	a3,s4
+     7a8:	4781                	li	a5,0
+     7aa:	0a0c8663          	beqz	s9,856 <.L12>
+     7ae:	4085                	li	ra,1
+     7b0:	081c8863          	beq	s9,ra,840 <.L167>
+     7b4:	4c09                	li	s8,2
+     7b6:	078c8c63          	beq	s9,s8,82e <.L168>
+     7ba:	430d                	li	t1,3
+     7bc:	066c8063          	beq	s9,t1,81c <.L169>
+     7c0:	4711                	li	a4,4
+     7c2:	04ec8463          	beq	s9,a4,80a <.L170>
+     7c6:	4895                	li	a7,5
+     7c8:	031c8863          	beq	s9,a7,7f8 <.L171>
+     7cc:	4819                	li	a6,6
+     7ce:	010c8c63          	beq	s9,a6,7e6 <.L172>
+
+000007d2 <.LVL39>:
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     7d2:	000a1583          	lh	a1,0(s4)
+     7d6:	000e9783          	lh	a5,0(t4)
+                        for(k=0;k<N;k++)
+     7da:	002a0693          	addi	a3,s4,2
+     7de:	008e8633          	add	a2,t4,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     7e2:	02f587b3          	mul	a5,a1,a5
+
+000007e6 <.L172>:
+     7e6:	00069d83          	lh	s11,0(a3)
+     7ea:	00061383          	lh	t2,0(a2)
+                        for(k=0;k<N;k++)
+     7ee:	0689                	addi	a3,a3,2
+     7f0:	9622                	add	a2,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     7f2:	027d82b3          	mul	t0,s11,t2
+     7f6:	9796                	add	a5,a5,t0
+
+000007f8 <.L171>:
+     7f8:	00069503          	lh	a0,0(a3)
+     7fc:	00061d03          	lh	s10,0(a2)
+                        for(k=0;k<N;k++)
+     800:	0689                	addi	a3,a3,2
+     802:	9622                	add	a2,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     804:	03a50e33          	mul	t3,a0,s10
+     808:	97f2                	add	a5,a5,t3
+
+0000080a <.L170>:
+     80a:	00069c83          	lh	s9,0(a3)
+     80e:	00061083          	lh	ra,0(a2)
+                        for(k=0;k<N;k++)
+     812:	0689                	addi	a3,a3,2
+     814:	9622                	add	a2,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     816:	021c8c33          	mul	s8,s9,ra
+     81a:	97e2                	add	a5,a5,s8
+
+0000081c <.L169>:
+     81c:	00069303          	lh	t1,0(a3)
+     820:	00061703          	lh	a4,0(a2)
+                        for(k=0;k<N;k++)
+     824:	0689                	addi	a3,a3,2
+     826:	9622                	add	a2,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     828:	02e308b3          	mul	a7,t1,a4
+     82c:	97c6                	add	a5,a5,a7
+
+0000082e <.L168>:
+     82e:	00069803          	lh	a6,0(a3)
+     832:	00061583          	lh	a1,0(a2)
+                        for(k=0;k<N;k++)
+     836:	0689                	addi	a3,a3,2
+     838:	9622                	add	a2,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     83a:	02b80db3          	mul	s11,a6,a1
+     83e:	97ee                	add	a5,a5,s11
+
+00000840 <.L167>:
+     840:	00069383          	lh	t2,0(a3)
+     844:	00061283          	lh	t0,0(a2)
+                        for(k=0;k<N;k++)
+     848:	0689                	addi	a3,a3,2
+     84a:	9622                	add	a2,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     84c:	02538533          	mul	a0,t2,t0
+     850:	97aa                	add	a5,a5,a0
+                        for(k=0;k<N;k++)
+     852:	0ad90363          	beq	s2,a3,8f8 <.L196>
+
+00000856 <.L12>:
+     856:	00860e33          	add	t3,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     85a:	00069c83          	lh	s9,0(a3)
+     85e:	00061c03          	lh	s8,0(a2)
+     862:	000e1303          	lh	t1,0(t3)
+     866:	00269d03          	lh	s10,2(a3)
+                        for(k=0;k<N;k++)
+     86a:	008e0733          	add	a4,t3,s0
+     86e:	008708b3          	add	a7,a4,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     872:	00071d83          	lh	s11,0(a4)
+     876:	038c8733          	mul	a4,s9,s8
+     87a:	00469083          	lh	ra,4(a3)
+                        for(k=0;k<N;k++)
+     87e:	00888833          	add	a6,a7,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     882:	00089c83          	lh	s9,0(a7)
+     886:	00669283          	lh	t0,6(a3)
+     88a:	00869883          	lh	a7,8(a3)
+     88e:	00081c03          	lh	s8,0(a6)
+                        for(k=0;k<N;k++)
+     892:	008803b3          	add	t2,a6,s0
+     896:	008385b3          	add	a1,t2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     89a:	00a69803          	lh	a6,10(a3)
+     89e:	026d0d33          	mul	s10,s10,t1
+     8a2:	00039383          	lh	t2,0(t2)
+     8a6:	00c69503          	lh	a0,12(a3)
+     8aa:	00059e03          	lh	t3,0(a1)
+                        for(k=0;k<N;k++)
+     8ae:	00858633          	add	a2,a1,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     8b2:	00061303          	lh	t1,0(a2)
+     8b6:	00e69583          	lh	a1,14(a3)
+     8ba:	97ba                	add	a5,a5,a4
+                        for(k=0;k<N;k++)
+     8bc:	06c1                	addi	a3,a3,16
+     8be:	9622                	add	a2,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+     8c0:	03b080b3          	mul	ra,ra,s11
+     8c4:	01a78db3          	add	s11,a5,s10
+     8c8:	039282b3          	mul	t0,t0,s9
+     8cc:	001d8733          	add	a4,s11,ra
+     8d0:	03888cb3          	mul	s9,a7,s8
+     8d4:	005708b3          	add	a7,a4,t0
+     8d8:	02780c33          	mul	s8,a6,t2
+     8dc:	01988833          	add	a6,a7,s9
+     8e0:	03c503b3          	mul	t2,a0,t3
+     8e4:	01880533          	add	a0,a6,s8
+     8e8:	02658d33          	mul	s10,a1,t1
+     8ec:	00750e33          	add	t3,a0,t2
+     8f0:	01ae07b3          	add	a5,t3,s10
+                        for(k=0;k<N;k++)
+     8f4:	f6d911e3          	bne	s2,a3,856 <.L12>
+
+000008f8 <.L196>:
+     8f8:	00ff2023          	sw	a5,0(t5)
+                for (j=0; j<N; j++) {
+     8fc:	001f8693          	addi	a3,t6,1
+
+00000900 <.LVL40>:
+     900:	0f11                	addi	t5,t5,4
+     902:	0e89                	addi	t4,t4,2
+     904:	01fa8463          	beq	s5,t6,90c <.L207>
+     908:	8fb6                	mv	t6,a3
+     90a:	b559                	j	790 <.L13>
+
+0000090c <.L207>:
+        for (i=0; i<N; i++) {
+     90c:	001b0f13          	addi	t5,s6,1
+
+00000910 <.LVL41>:
+     910:	9a22                	add	s4,s4,s0
+     912:	9ba6                	add	s7,s7,s1
+     914:	9922                	add	s2,s2,s0
+     916:	896a87e3          	beq	s5,s6,1a4 <.L14>
+     91a:	8b7a                	mv	s6,t5
+     91c:	bdb1                	j	778 <.L11>
+
+0000091e <core_bench_matrix>:
+        matrix_test(N,C,A,B,val);
+     91e:	4514                	lw	a3,8(a0)
+     920:	4150                	lw	a2,4(a0)
+void core_bench_matrix(mat_params *p, ee_s16 seed) {
+     922:	872e                	mv	a4,a1
+
+00000924 <.LVL43>:
+        matrix_test(N,C,A,B,val);
+     924:	454c                	lw	a1,12(a0)
+
+00000926 <.LVL44>:
+     926:	4108                	lw	a0,0(a0)
+
+00000928 <.LVL45>:
+     928:	f14ff06f          	j	3c <matrix_test>
+
+0000092c <core_init_matrix>:
+void core_init_matrix(ee_u32 blksize, void *memblk, mat_params *p) {
+     92c:	7179                	addi	sp,sp,-48
+        A=(MATDAT *)align_mem(memblk);
+     92e:	fff58793          	addi	a5,a1,-1
+void core_init_matrix(ee_u32 blksize, void *memblk, mat_params *p) {
+     932:	d426                	sw	s1,40(sp)
+     934:	d04e                	sw	s3,32(sp)
+        A=(MATDAT *)align_mem(memblk);
+     936:	ffc7f293          	andi	t0,a5,-4
+
+0000093a <.LVL48>:
+void core_init_matrix(ee_u32 blksize, void *memblk, mat_params *p) {
+     93a:	d622                	sw	s0,44(sp)
+     93c:	d24a                	sw	s2,36(sp)
+     93e:	ce52                	sw	s4,28(sp)
+     940:	cc56                	sw	s5,24(sp)
+     942:	ca5a                	sw	s6,20(sp)
+     944:	c85e                	sw	s7,16(sp)
+     946:	c662                	sw	s8,12(sp)
+     948:	c466                	sw	s9,8(sp)
+     94a:	c26a                	sw	s10,4(sp)
+     94c:	c06e                	sw	s11,0(sp)
+     94e:	84b2                	mv	s1,a2
+        A=(MATDAT *)align_mem(memblk);
+     950:	00428993          	addi	s3,t0,4
+        while (j<blksize) {
+     954:	34050563          	beqz	a0,c9e <.L210>
+        ee_u32 i=0,j=0;
+     958:	4901                	li	s2,0
+
+0000095a <.L211>:
+                i++;
+     95a:	00190693          	addi	a3,s2,1
+
+0000095e <.LVL50>:
+                j=i*i*2*4;
+     95e:	02d68733          	mul	a4,a3,a3
+                i++;
+     962:	00290393          	addi	t2,s2,2
+     966:	00390593          	addi	a1,s2,3
+     96a:	00490313          	addi	t1,s2,4
+     96e:	00590e13          	addi	t3,s2,5
+     972:	00690813          	addi	a6,s2,6
+     976:	00790893          	addi	a7,s2,7
+        while (j<blksize) {
+     97a:	8eca                	mv	t4,s2
+                i++;
+     97c:	0921                	addi	s2,s2,8
+                j=i*i*2*4;
+     97e:	00371a93          	slli	s5,a4,0x3
+        while (j<blksize) {
+     982:	06aaf363          	bgeu	s5,a0,9e8 <.L252>
+                j=i*i*2*4;
+     986:	02738b33          	mul	s6,t2,t2
+     98a:	8eb6                	mv	t4,a3
+     98c:	003b1b93          	slli	s7,s6,0x3
+        while (j<blksize) {
+     990:	04abfc63          	bgeu	s7,a0,9e8 <.L252>
+                j=i*i*2*4;
+     994:	02b58c33          	mul	s8,a1,a1
+     998:	8e9e                	mv	t4,t2
+     99a:	003c1c93          	slli	s9,s8,0x3
+        while (j<blksize) {
+     99e:	04acf563          	bgeu	s9,a0,9e8 <.L252>
+                j=i*i*2*4;
+     9a2:	02630d33          	mul	s10,t1,t1
+     9a6:	8eae                	mv	t4,a1
+     9a8:	003d1d93          	slli	s11,s10,0x3
+        while (j<blksize) {
+     9ac:	02adfe63          	bgeu	s11,a0,9e8 <.L252>
+                j=i*i*2*4;
+     9b0:	03ce0f33          	mul	t5,t3,t3
+     9b4:	8e9a                	mv	t4,t1
+     9b6:	003f1f93          	slli	t6,t5,0x3
+        while (j<blksize) {
+     9ba:	02aff763          	bgeu	t6,a0,9e8 <.L252>
+                j=i*i*2*4;
+     9be:	030807b3          	mul	a5,a6,a6
+     9c2:	8ef2                	mv	t4,t3
+     9c4:	00379293          	slli	t0,a5,0x3
+        while (j<blksize) {
+     9c8:	02a2f063          	bgeu	t0,a0,9e8 <.L252>
+                j=i*i*2*4;
+     9cc:	03188633          	mul	a2,a7,a7
+     9d0:	8ec2                	mv	t4,a6
+     9d2:	00361a13          	slli	s4,a2,0x3
+        while (j<blksize) {
+     9d6:	00aa7963          	bgeu	s4,a0,9e8 <.L252>
+                j=i*i*2*4;
+     9da:	03290433          	mul	s0,s2,s2
+     9de:	8ec6                	mv	t4,a7
+     9e0:	00341693          	slli	a3,s0,0x3
+        while (j<blksize) {
+     9e4:	f6a6ebe3          	bltu	a3,a0,95a <.L211>
+
+000009e8 <.L252>:
+        B=A+N*N;
+     9e8:	03de8533          	mul	a0,t4,t4
+
+000009ec <.LVL52>:
+        p->N=N;
+     9ec:	8a76                	mv	s4,t4
+        B=A+N*N;
+     9ee:	00151413          	slli	s0,a0,0x1
+     9f2:	00898633          	add	a2,s3,s0
+
+000009f6 <.LVL53>:
+        for (i=0; i<N; i++) {
+     9f6:	260e8863          	beqz	t4,c66 <.L213>
+
+000009fa <.L212>:
+                        seed = ( ( order * seed ) % 65536 );
+     9fa:	65c1                	lui	a1,0x10
+        B=A+N*N;
+     9fc:	4381                	li	t2,0
+     9fe:	4785                	li	a5,1
+     a00:	4281                	li	t0,0
+     a02:	4f05                	li	t5,1
+     a04:	40c98e33          	sub	t3,s3,a2
+                        seed = ( ( order * seed ) % 65536 );
+     a08:	fff58313          	addi	t1,a1,-1 # ffff <_end+0xdd01>
+                        order++;
+     a0c:	fffe8913          	addi	s2,t4,-1
+
+00000a10 <.L217>:
+                        seed = ( ( order * seed ) % 65536 );
+     a10:	02ff0b33          	mul	s6,t5,a5
+     a14:	010f1813          	slli	a6,t5,0x10
+     a18:	01085713          	srli	a4,a6,0x10
+     a1c:	00139893          	slli	a7,t2,0x1
+     a20:	00c88bb3          	add	s7,a7,a2
+     a24:	fffe8c13          	addi	s8,t4,-1
+                        A[i*N+j] = val;
+     a28:	017e0ab3          	add	s5,t3,s7
+     a2c:	003c7c93          	andi	s9,s8,3
+
+00000a30 <.LVL56>:
+                for (j=0; j<N; j++) {
+     a30:	4885                	li	a7,1
+                        order++;
+     a32:	001f0593          	addi	a1,t5,1
+                        seed = ( ( order * seed ) % 65536 );
+     a36:	41fb5d13          	srai	s10,s6,0x1f
+     a3a:	010d5d93          	srli	s11,s10,0x10
+     a3e:	01bb0fb3          	add	t6,s6,s11
+     a42:	006ff7b3          	and	a5,t6,t1
+
+00000a46 <.LVL57>:
+     a46:	41b787b3          	sub	a5,a5,s11
+
+00000a4a <.LVL58>:
+                        val = (seed + order);
+     a4a:	00f70533          	add	a0,a4,a5
+     a4e:	01051b13          	slli	s6,a0,0x10
+     a52:	010b5813          	srli	a6,s6,0x10
+                        val =  (val + order);
+     a56:	9742                	add	a4,a4,a6
+                        B[i*N+j] = val;
+     a58:	010b9023          	sh	a6,0(s7)
+                        val=matrix_clip(val,1);
+     a5c:	0ff77c13          	andi	s8,a4,255
+                        A[i*N+j] = val;
+     a60:	018a9023          	sh	s8,0(s5)
+
+00000a64 <.LVL60>:
+                for (j=0; j<N; j++) {
+     a64:	002b8693          	addi	a3,s7,2
+     a68:	1fd8f563          	bgeu	a7,t4,c52 <.L250>
+     a6c:	0e0c8363          	beqz	s9,b52 <.L214>
+     a70:	091c8c63          	beq	s9,a7,b08 <.L240>
+     a74:	4a89                	li	s5,2
+     a76:	055c8663          	beq	s9,s5,ac2 <.L241>
+                        seed = ( ( order * seed ) % 65536 );
+     a7a:	02f58cb3          	mul	s9,a1,a5
+     a7e:	05c2                	slli	a1,a1,0x10
+
+00000a80 <.LVL61>:
+     a80:	0105dd13          	srli	s10,a1,0x10
+                        A[i*N+j] = val;
+     a84:	00de0db3          	add	s11,t3,a3
+                for (j=0; j<N; j++) {
+     a88:	004b8693          	addi	a3,s7,4
+                        order++;
+     a8c:	002f0593          	addi	a1,t5,2
+                for (j=0; j<N; j++) {
+     a90:	4889                	li	a7,2
+                        seed = ( ( order * seed ) % 65536 );
+     a92:	41fcdf93          	srai	t6,s9,0x1f
+     a96:	010fd513          	srli	a0,t6,0x10
+     a9a:	00ac87b3          	add	a5,s9,a0
+
+00000a9e <.LVL62>:
+     a9e:	0067fb33          	and	s6,a5,t1
+
+00000aa2 <.LVL63>:
+     aa2:	40ab07b3          	sub	a5,s6,a0
+
+00000aa6 <.LVL64>:
+                        val = (seed + order);
+     aa6:	00fd0833          	add	a6,s10,a5
+     aaa:	01081713          	slli	a4,a6,0x10
+     aae:	01075c13          	srli	s8,a4,0x10
+                        val =  (val + order);
+     ab2:	01ac0ab3          	add	s5,s8,s10
+                        B[i*N+j] = val;
+     ab6:	018b9123          	sh	s8,2(s7)
+                        val=matrix_clip(val,1);
+     aba:	0ffafb93          	andi	s7,s5,255
+                        A[i*N+j] = val;
+     abe:	017d9023          	sh	s7,0(s11)
+
+00000ac2 <.L241>:
+                        seed = ( ( order * seed ) % 65536 );
+     ac2:	02f58cb3          	mul	s9,a1,a5
+     ac6:	01059d13          	slli	s10,a1,0x10
+     aca:	010d5d93          	srli	s11,s10,0x10
+                        A[i*N+j] = val;
+     ace:	00de0fb3          	add	t6,t3,a3
+                for (j=0; j<N; j++) {
+     ad2:	0885                	addi	a7,a7,1
+                        val = (seed + order);
+     ad4:	0585                	addi	a1,a1,1
+                for (j=0; j<N; j++) {
+     ad6:	0689                	addi	a3,a3,2
+                        seed = ( ( order * seed ) % 65536 );
+     ad8:	41fcd513          	srai	a0,s9,0x1f
+     adc:	01055b13          	srli	s6,a0,0x10
+     ae0:	016c87b3          	add	a5,s9,s6
+
+00000ae4 <.LVL66>:
+     ae4:	0067f833          	and	a6,a5,t1
+
+00000ae8 <.LVL67>:
+     ae8:	416807b3          	sub	a5,a6,s6
+
+00000aec <.LVL68>:
+                        val = (seed + order);
+     aec:	00fd8733          	add	a4,s11,a5
+     af0:	01071c13          	slli	s8,a4,0x10
+     af4:	010c5a93          	srli	s5,s8,0x10
+                        val =  (val + order);
+     af8:	01ba8bb3          	add	s7,s5,s11
+                        B[i*N+j] = val;
+     afc:	ff569f23          	sh	s5,-2(a3)
+                        val=matrix_clip(val,1);
+     b00:	0ffbfc93          	andi	s9,s7,255
+                        A[i*N+j] = val;
+     b04:	019f9023          	sh	s9,0(t6)
+
+00000b08 <.L240>:
+                        seed = ( ( order * seed ) % 65536 );
+     b08:	02f58d33          	mul	s10,a1,a5
+     b0c:	01059d93          	slli	s11,a1,0x10
+     b10:	010ddf93          	srli	t6,s11,0x10
+                        A[i*N+j] = val;
+     b14:	00de0b33          	add	s6,t3,a3
+                for (j=0; j<N; j++) {
+     b18:	0689                	addi	a3,a3,2
+     b1a:	0885                	addi	a7,a7,1
+                        val = (seed + order);
+     b1c:	0585                	addi	a1,a1,1
+                        seed = ( ( order * seed ) % 65536 );
+     b1e:	41fd5513          	srai	a0,s10,0x1f
+     b22:	01055813          	srli	a6,a0,0x10
+     b26:	010d07b3          	add	a5,s10,a6
+
+00000b2a <.LVL69>:
+     b2a:	0067f733          	and	a4,a5,t1
+
+00000b2e <.LVL70>:
+     b2e:	410707b3          	sub	a5,a4,a6
+
+00000b32 <.LVL71>:
+                        val = (seed + order);
+     b32:	00ff8c33          	add	s8,t6,a5
+     b36:	010c1a93          	slli	s5,s8,0x10
+     b3a:	010adb93          	srli	s7,s5,0x10
+                        val =  (val + order);
+     b3e:	01fb8cb3          	add	s9,s7,t6
+                        B[i*N+j] = val;
+     b42:	ff769f23          	sh	s7,-2(a3)
+                        val=matrix_clip(val,1);
+     b46:	0ffcfd13          	andi	s10,s9,255
+                        A[i*N+j] = val;
+     b4a:	01ab1023          	sh	s10,0(s6)
+                for (j=0; j<N; j++) {
+     b4e:	11d8f263          	bgeu	a7,t4,c52 <.L250>
+
+00000b52 <.L214>:
+                        seed = ( ( order * seed ) % 65536 );
+     b52:	02f587b3          	mul	a5,a1,a5
+
+00000b56 <.LVL72>:
+                        order++;
+     b56:	00158d13          	addi	s10,a1,1
+     b5a:	00258713          	addi	a4,a1,2
+     b5e:	00358b13          	addi	s6,a1,3
+     b62:	01059d93          	slli	s11,a1,0x10
+     b66:	010d1f93          	slli	t6,s10,0x10
+     b6a:	010dda93          	srli	s5,s11,0x10
+     b6e:	010fdb93          	srli	s7,t6,0x10
+     b72:	01071513          	slli	a0,a4,0x10
+     b76:	010b1d93          	slli	s11,s6,0x10
+                        seed = ( ( order * seed ) % 65536 );
+     b7a:	41f7df93          	srai	t6,a5,0x1f
+     b7e:	01055813          	srli	a6,a0,0x10
+     b82:	010dd513          	srli	a0,s11,0x10
+     b86:	010fdd93          	srli	s11,t6,0x10
+     b8a:	97ee                	add	a5,a5,s11
+     b8c:	0067ffb3          	and	t6,a5,t1
+     b90:	41bf8db3          	sub	s11,t6,s11
+     b94:	03bd0d33          	mul	s10,s10,s11
+                        val = (seed + order);
+     b98:	01ba87b3          	add	a5,s5,s11
+     b9c:	01079f93          	slli	t6,a5,0x10
+     ba0:	010fdd93          	srli	s11,t6,0x10
+
+00000ba4 <.LVL73>:
+                        val =  (val + order);
+     ba4:	9aee                	add	s5,s5,s11
+                        A[i*N+j] = val;
+     ba6:	00de0cb3          	add	s9,t3,a3
+                        B[i*N+j] = val;
+     baa:	01b69023          	sh	s11,0(a3)
+
+00000bae <.LVL74>:
+                        val=matrix_clip(val,1);
+     bae:	0ffaf793          	andi	a5,s5,255
+                        A[i*N+j] = val;
+     bb2:	00fc9023          	sh	a5,0(s9)
+     bb6:	8c66                	mv	s8,s9
+     bb8:	8de6                	mv	s11,s9
+     bba:	8fe6                	mv	t6,s9
+                        seed = ( ( order * seed ) % 65536 );
+     bbc:	41fd5c93          	srai	s9,s10,0x1f
+     bc0:	010cda93          	srli	s5,s9,0x10
+
+00000bc4 <.LVL75>:
+     bc4:	9d56                	add	s10,s10,s5
+     bc6:	006d77b3          	and	a5,s10,t1
+     bca:	41578cb3          	sub	s9,a5,s5
+     bce:	03970733          	mul	a4,a4,s9
+                        val = (seed + order);
+     bd2:	019b8ab3          	add	s5,s7,s9
+     bd6:	010a9d13          	slli	s10,s5,0x10
+     bda:	010d5793          	srli	a5,s10,0x10
+                        val =  (val + order);
+     bde:	9bbe                	add	s7,s7,a5
+                        B[i*N+j] = val;
+     be0:	00f69123          	sh	a5,2(a3)
+                        val=matrix_clip(val,1);
+     be4:	0ffbfc93          	andi	s9,s7,255
+                        A[i*N+j] = val;
+     be8:	019c1123          	sh	s9,2(s8)
+                for (j=0; j<N; j++) {
+     bec:	06a1                	addi	a3,a3,8
+     bee:	0891                	addi	a7,a7,4
+                        seed = ( ( order * seed ) % 65536 );
+     bf0:	41f75c13          	srai	s8,a4,0x1f
+     bf4:	010c5a93          	srli	s5,s8,0x10
+     bf8:	9756                	add	a4,a4,s5
+     bfa:	00677d33          	and	s10,a4,t1
+     bfe:	415d07b3          	sub	a5,s10,s5
+     c02:	02fb0b33          	mul	s6,s6,a5
+                        val = (seed + order);
+     c06:	00f80bb3          	add	s7,a6,a5
+     c0a:	010b9c93          	slli	s9,s7,0x10
+     c0e:	010cdc13          	srli	s8,s9,0x10
+                        val =  (val + order);
+     c12:	9862                	add	a6,a6,s8
+                        B[i*N+j] = val;
+     c14:	ff869e23          	sh	s8,-4(a3)
+                        val=matrix_clip(val,1);
+     c18:	0ff87a93          	andi	s5,a6,255
+                        A[i*N+j] = val;
+     c1c:	015d9223          	sh	s5,4(s11)
+                        order++;
+     c20:	0591                	addi	a1,a1,4
+                        seed = ( ( order * seed ) % 65536 );
+     c22:	41fb5d93          	srai	s11,s6,0x1f
+     c26:	010dd713          	srli	a4,s11,0x10
+     c2a:	00eb0d33          	add	s10,s6,a4
+     c2e:	006d77b3          	and	a5,s10,t1
+
+00000c32 <.LVL76>:
+     c32:	8f99                	sub	a5,a5,a4
+
+00000c34 <.LVL77>:
+                        val = (seed + order);
+     c34:	00f50b33          	add	s6,a0,a5
+     c38:	010b1b93          	slli	s7,s6,0x10
+     c3c:	010bdc93          	srli	s9,s7,0x10
+                        val =  (val + order);
+     c40:	9566                	add	a0,a0,s9
+                        B[i*N+j] = val;
+     c42:	ff969f23          	sh	s9,-2(a3)
+                        val=matrix_clip(val,1);
+     c46:	0ff57c13          	andi	s8,a0,255
+                        A[i*N+j] = val;
+     c4a:	018f9323          	sh	s8,6(t6)
+
+00000c4e <.LVL78>:
+                for (j=0; j<N; j++) {
+     c4e:	f1d8e2e3          	bltu	a7,t4,b52 <.L214>
+
+00000c52 <.L250>:
+     c52:	0f05                	addi	t5,t5,1
+                        order++;
+     c54:	4881                	li	a7,0
+     c56:	000e8363          	beqz	t4,c5c <.L216>
+     c5a:	88ca                	mv	a7,s2
+
+00000c5c <.L216>:
+        for (i=0; i<N; i++) {
+     c5c:	0285                	addi	t0,t0,1
+
+00000c5e <.LVL80>:
+                        order++;
+     c5e:	9f46                	add	t5,t5,a7
+
+00000c60 <.LVL81>:
+        for (i=0; i<N; i++) {
+     c60:	93f6                	add	t2,t2,t4
+     c62:	dbd2e7e3          	bltu	t0,t4,a10 <.L217>
+
+00000c66 <.L213>:
+        p->C=(MATRES *)align_mem(B+N*N);
+     c66:	9432                	add	s0,s0,a2
+     c68:	fff40e93          	addi	t4,s0,-1
+     c6c:	ffcef393          	andi	t2,t4,-4
+}
+     c70:	5432                	lw	s0,44(sp)
+        p->C=(MATRES *)align_mem(B+N*N);
+     c72:	00438293          	addi	t0,t2,4
+        p->A=A;
+     c76:	0134a223          	sw	s3,4(s1)
+        p->N=N;
+     c7a:	0144a023          	sw	s4,0(s1)
+        p->B=B;
+     c7e:	c490                	sw	a2,8(s1)
+        p->C=(MATRES *)align_mem(B+N*N);
+     c80:	0054a623          	sw	t0,12(s1)
+}
+     c84:	5912                	lw	s2,36(sp)
+     c86:	54a2                	lw	s1,40(sp)
+
+00000c88 <.LVL83>:
+     c88:	5982                	lw	s3,32(sp)
+     c8a:	4a72                	lw	s4,28(sp)
+     c8c:	4ae2                	lw	s5,24(sp)
+     c8e:	4b52                	lw	s6,20(sp)
+     c90:	4bc2                	lw	s7,16(sp)
+     c92:	4c32                	lw	s8,12(sp)
+     c94:	4ca2                	lw	s9,8(sp)
+     c96:	4d12                	lw	s10,4(sp)
+     c98:	4d82                	lw	s11,0(sp)
+     c9a:	6145                	addi	sp,sp,48
+     c9c:	8082                	ret
+
+00000c9e <.L210>:
+        B=A+N*N;
+     c9e:	00628613          	addi	a2,t0,6
+
+00000ca2 <.LVL85>:
+     ca2:	5a7d                	li	s4,-1
+        N=i-1;
+     ca4:	5efd                	li	t4,-1
+        B=A+N*N;
+     ca6:	4409                	li	s0,2
+     ca8:	bb89                	j	9fa <.L212>
+
+00000caa <matrix_sum>:
+ee_s16 matrix_sum(ee_u32 N, MATRES *C, MATDAT clipval) {
+     caa:	882a                	mv	a6,a0
+        for (i=0; i<N; i++) {
+     cac:	3e050663          	beqz	a0,1098 <.L260>
+     cb0:	40a008b3          	neg	a7,a0
+     cb4:	00251713          	slli	a4,a0,0x2
+     cb8:	972e                	add	a4,a4,a1
+     cba:	00289313          	slli	t1,a7,0x2
+     cbe:	4581                	li	a1,0
+
+00000cc0 <.LVL87>:
+        ee_s16 ret=0;
+     cc0:	4501                	li	a0,0
+
+00000cc2 <.LVL88>:
+        MATRES tmp=0,prev=0,cur=0;
+     cc2:	4f81                	li	t6,0
+     cc4:	4e81                	li	t4,0
+        for (i=0; i<N; i++) {
+     cc6:	088e                	slli	a7,a7,0x3
+
+00000cc8 <.L259>:
+                for (j=0; j<N; j++) {
+     cc8:	00e306b3          	add	a3,t1,a4
+     ccc:	40d707b3          	sub	a5,a4,a3
+     cd0:	ffc78293          	addi	t0,a5,-4
+     cd4:	0022d393          	srli	t2,t0,0x2
+     cd8:	00138e13          	addi	t3,t2,1
+     cdc:	007e7793          	andi	a5,t3,7
+        MATRES tmp=0,prev=0,cur=0;
+     ce0:	8e36                	mv	t3,a3
+     ce2:	22078063          	beqz	a5,f02 <.L258>
+     ce6:	4f05                	li	t5,1
+     ce8:	0fe78963          	beq	a5,t5,dda <.L298>
+     cec:	4289                	li	t0,2
+     cee:	0c578463          	beq	a5,t0,db6 <.L299>
+     cf2:	438d                	li	t2,3
+     cf4:	0a778163          	beq	a5,t2,d96 <.L300>
+     cf8:	4f11                	li	t5,4
+     cfa:	07e78c63          	beq	a5,t5,d72 <.L301>
+     cfe:	4295                	li	t0,5
+     d00:	04578763          	beq	a5,t0,d4e <.L302>
+     d04:	4399                	li	t2,6
+     d06:	02778463          	beq	a5,t2,d2e <.L303>
+
+00000d0a <.LVL90>:
+                        cur=C[i*N+j];
+     d0a:	8e7e                	mv	t3,t6
+
+00000d0c <.LVL91>:
+     d0c:	0006af83          	lw	t6,0(a3)
+
+00000d10 <.LVL92>:
+                                ret+=10;
+     d10:	0542                	slli	a0,a0,0x10
+     d12:	01055f13          	srli	t5,a0,0x10
+                        tmp+=cur;
+     d16:	9efe                	add	t4,t4,t6
+
+00000d18 <.LVL93>:
+                        if (tmp>clipval) {
+     d18:	37d65763          	bge	a2,t4,1086 <.L307>
+                                ret+=10;
+     d1c:	00af0e93          	addi	t4,t5,10
+
+00000d20 <.LVL94>:
+     d20:	010e9e13          	slli	t3,t4,0x10
+     d24:	410e5513          	srai	a0,t3,0x10
+
+00000d28 <.LVL95>:
+                                tmp=0;
+     d28:	4e81                	li	t4,0
+
+00000d2a <.L308>:
+                for (j=0; j<N; j++) {
+     d2a:	00468e13          	addi	t3,a3,4
+
+00000d2e <.L303>:
+                        cur=C[i*N+j];
+     d2e:	8f7e                	mv	t5,t6
+
+00000d30 <.LVL98>:
+     d30:	000e2f83          	lw	t6,0(t3)
+
+00000d34 <.LVL99>:
+                                ret+=10;
+     d34:	0542                	slli	a0,a0,0x10
+     d36:	01055293          	srli	t0,a0,0x10
+                        tmp+=cur;
+     d3a:	9efe                	add	t4,t4,t6
+
+00000d3c <.LVL100>:
+                        if (tmp>clipval) {
+     d3c:	33d65c63          	bge	a2,t4,1074 <.L309>
+                                ret+=10;
+     d40:	00a28e93          	addi	t4,t0,10
+
+00000d44 <.LVL101>:
+     d44:	010e9513          	slli	a0,t4,0x10
+     d48:	8541                	srai	a0,a0,0x10
+
+00000d4a <.LVL102>:
+                                tmp=0;
+     d4a:	4e81                	li	t4,0
+
+00000d4c <.L310>:
+                for (j=0; j<N; j++) {
+     d4c:	0e11                	addi	t3,t3,4
+
+00000d4e <.L302>:
+                        cur=C[i*N+j];
+     d4e:	82fe                	mv	t0,t6
+
+00000d50 <.LVL105>:
+     d50:	000e2f83          	lw	t6,0(t3)
+
+00000d54 <.LVL106>:
+                                ret+=10;
+     d54:	01051793          	slli	a5,a0,0x10
+     d58:	0107d393          	srli	t2,a5,0x10
+                        tmp+=cur;
+     d5c:	9efe                	add	t4,t4,t6
+
+00000d5e <.LVL107>:
+                        if (tmp>clipval) {
+     d5e:	31d65263          	bge	a2,t4,1062 <.L311>
+                                ret+=10;
+     d62:	00a38e93          	addi	t4,t2,10
+
+00000d66 <.LVL108>:
+     d66:	010e9793          	slli	a5,t4,0x10
+     d6a:	4107d513          	srai	a0,a5,0x10
+
+00000d6e <.LVL109>:
+                                tmp=0;
+     d6e:	4e81                	li	t4,0
+
+00000d70 <.L312>:
+                for (j=0; j<N; j++) {
+     d70:	0e11                	addi	t3,t3,4
+
+00000d72 <.L301>:
+                        cur=C[i*N+j];
+     d72:	83fe                	mv	t2,t6
+
+00000d74 <.LVL112>:
+     d74:	000e2f83          	lw	t6,0(t3)
+
+00000d78 <.LVL113>:
+                                ret+=10;
+     d78:	01051f13          	slli	t5,a0,0x10
+     d7c:	010f5513          	srli	a0,t5,0x10
+                        tmp+=cur;
+     d80:	9efe                	add	t4,t4,t6
+
+00000d82 <.LVL114>:
+                        if (tmp>clipval) {
+     d82:	2dd65763          	bge	a2,t4,1050 <.L313>
+                                ret+=10;
+     d86:	00a50e93          	addi	t4,a0,10
+
+00000d8a <.LVL115>:
+     d8a:	010e9f13          	slli	t5,t4,0x10
+     d8e:	410f5513          	srai	a0,t5,0x10
+
+00000d92 <.LVL116>:
+                                tmp=0;
+     d92:	4e81                	li	t4,0
+
+00000d94 <.L314>:
+                for (j=0; j<N; j++) {
+     d94:	0e11                	addi	t3,t3,4
+
+00000d96 <.L300>:
+                        cur=C[i*N+j];
+     d96:	82fe                	mv	t0,t6
+
+00000d98 <.LVL119>:
+     d98:	000e2f83          	lw	t6,0(t3)
+
+00000d9c <.LVL120>:
+                                ret+=10;
+     d9c:	0542                	slli	a0,a0,0x10
+     d9e:	01055393          	srli	t2,a0,0x10
+                        tmp+=cur;
+     da2:	9efe                	add	t4,t4,t6
+
+00000da4 <.LVL121>:
+                        if (tmp>clipval) {
+     da4:	29d65d63          	bge	a2,t4,103e <.L315>
+                                ret+=10;
+     da8:	00a38e93          	addi	t4,t2,10
+
+00000dac <.LVL122>:
+     dac:	010e9513          	slli	a0,t4,0x10
+     db0:	8541                	srai	a0,a0,0x10
+
+00000db2 <.LVL123>:
+                                tmp=0;
+     db2:	4e81                	li	t4,0
+
+00000db4 <.L316>:
+                for (j=0; j<N; j++) {
+     db4:	0e11                	addi	t3,t3,4
+
+00000db6 <.L299>:
+                        cur=C[i*N+j];
+     db6:	83fe                	mv	t2,t6
+
+00000db8 <.LVL126>:
+     db8:	000e2f83          	lw	t6,0(t3)
+
+00000dbc <.LVL127>:
+                                ret+=10;
+     dbc:	01051793          	slli	a5,a0,0x10
+     dc0:	0107df13          	srli	t5,a5,0x10
+                        tmp+=cur;
+     dc4:	9efe                	add	t4,t4,t6
+
+00000dc6 <.LVL128>:
+                        if (tmp>clipval) {
+     dc6:	27d65363          	bge	a2,t4,102c <.L317>
+                                ret+=10;
+     dca:	00af0e93          	addi	t4,t5,10
+
+00000dce <.LVL129>:
+     dce:	010e9793          	slli	a5,t4,0x10
+     dd2:	4107d513          	srai	a0,a5,0x10
+
+00000dd6 <.LVL130>:
+                                tmp=0;
+     dd6:	4e81                	li	t4,0
+
+00000dd8 <.L318>:
+                for (j=0; j<N; j++) {
+     dd8:	0e11                	addi	t3,t3,4
+
+00000dda <.L298>:
+                        cur=C[i*N+j];
+     dda:	8f7e                	mv	t5,t6
+
+00000ddc <.LVL133>:
+     ddc:	000e2f83          	lw	t6,0(t3)
+
+00000de0 <.LVL134>:
+                                ret+=10;
+     de0:	01051293          	slli	t0,a0,0x10
+     de4:	0102d513          	srli	a0,t0,0x10
+                        tmp+=cur;
+     de8:	9efe                	add	t4,t4,t6
+
+00000dea <.LVL135>:
+                        if (tmp>clipval) {
+     dea:	23d65863          	bge	a2,t4,101a <.L319>
+                                ret+=10;
+     dee:	00a50e93          	addi	t4,a0,10
+
+00000df2 <.LVL136>:
+     df2:	010e9293          	slli	t0,t4,0x10
+     df6:	4102d513          	srai	a0,t0,0x10
+
+00000dfa <.LVL137>:
+                                tmp=0;
+     dfa:	4e81                	li	t4,0
+
+00000dfc <.L320>:
+                for (j=0; j<N; j++) {
+     dfc:	0e11                	addi	t3,t3,4
+
+00000dfe <.LVL139>:
+     dfe:	11c71263          	bne	a4,t3,f02 <.L258>
+
+00000e02 <.L321>:
+        for (i=0; i<N; i++) {
+     e02:	0585                	addi	a1,a1,1
+     e04:	41168733          	sub	a4,a3,a7
+     e08:	ecb810e3          	bne	a6,a1,cc8 <.L259>
+     e0c:	8082                	ret
+
+00000e0e <.L336>:
+                                ret += (cur>prev) ? 1 : 0;
+     e0e:	007fafb3          	slt	t6,t6,t2
+     e12:	01ff07b3          	add	a5,t5,t6
+                        cur=C[i*N+j];
+     e16:	004e2f83          	lw	t6,4(t3)
+                                ret += (cur>prev) ? 1 : 0;
+     e1a:	01079293          	slli	t0,a5,0x10
+     e1e:	4102df13          	srai	t5,t0,0x10
+                                ret+=10;
+     e22:	010f1793          	slli	a5,t5,0x10
+                        tmp+=cur;
+     e26:	01fe8533          	add	a0,t4,t6
+                for (j=0; j<N; j++) {
+     e2a:	0e11                	addi	t3,t3,4
+                                ret+=10;
+     e2c:	0107d293          	srli	t0,a5,0x10
+                        if (tmp>clipval) {
+     e30:	10a65363          	bge	a2,a0,f36 <.L335>
+
+00000e34 <.L284>:
+                        cur=C[i*N+j];
+     e34:	004e2383          	lw	t2,4(t3)
+                                ret+=10;
+     e38:	02a9                	addi	t0,t0,10
+     e3a:	01029513          	slli	a0,t0,0x10
+     e3e:	41055793          	srai	a5,a0,0x10
+
+00000e42 <.LVL142>:
+                                tmp=0;
+     e42:	4501                	li	a0,0
+
+00000e44 <.LVL143>:
+                                ret+=10;
+     e44:	01079f13          	slli	t5,a5,0x10
+                        tmp+=cur;
+     e48:	00750eb3          	add	t4,a0,t2
+                                ret+=10;
+     e4c:	010f5793          	srli	a5,t5,0x10
+                        if (tmp>clipval) {
+     e50:	11d65563          	bge	a2,t4,f5a <.L323>
+
+00000e54 <.L337>:
+                        cur=C[i*N+j];
+     e54:	008e2f83          	lw	t6,8(t3)
+                                ret+=10;
+     e58:	07a9                	addi	a5,a5,10
+     e5a:	01079e93          	slli	t4,a5,0x10
+     e5e:	410edf13          	srai	t5,t4,0x10
+
+00000e62 <.LVL144>:
+                                tmp=0;
+     e62:	4e81                	li	t4,0
+
+00000e64 <.LVL145>:
+                                ret+=10;
+     e64:	010f1293          	slli	t0,t5,0x10
+                        tmp+=cur;
+     e68:	9efe                	add	t4,t4,t6
+                                ret+=10;
+     e6a:	0102d513          	srli	a0,t0,0x10
+                        if (tmp>clipval) {
+     e6e:	11d65763          	bge	a2,t4,f7c <.L325>
+
+00000e72 <.L338>:
+                        cur=C[i*N+j];
+     e72:	00ce2383          	lw	t2,12(t3)
+                                ret+=10;
+     e76:	0529                	addi	a0,a0,10
+     e78:	01051e93          	slli	t4,a0,0x10
+     e7c:	410ed293          	srai	t0,t4,0x10
+
+00000e80 <.LVL146>:
+                                tmp=0;
+     e80:	4e81                	li	t4,0
+
+00000e82 <.LVL147>:
+                                ret+=10;
+     e82:	01029f13          	slli	t5,t0,0x10
+                        tmp+=cur;
+     e86:	007e82b3          	add	t0,t4,t2
+                                ret+=10;
+     e8a:	010f5793          	srli	a5,t5,0x10
+                        if (tmp>clipval) {
+     e8e:	10565963          	bge	a2,t0,fa0 <.L327>
+
+00000e92 <.L339>:
+                                ret+=10;
+     e92:	07a9                	addi	a5,a5,10
+                        cur=C[i*N+j];
+     e94:	010e2f83          	lw	t6,16(t3)
+                                ret+=10;
+     e98:	01079293          	slli	t0,a5,0x10
+     e9c:	4102df13          	srai	t5,t0,0x10
+
+00000ea0 <.LVL148>:
+                                tmp=0;
+     ea0:	4281                	li	t0,0
+
+00000ea2 <.LVL149>:
+                                ret+=10;
+     ea2:	010f1513          	slli	a0,t5,0x10
+                        tmp+=cur;
+     ea6:	01f28eb3          	add	t4,t0,t6
+                                ret+=10;
+     eaa:	01055793          	srli	a5,a0,0x10
+                        if (tmp>clipval) {
+     eae:	11d65b63          	bge	a2,t4,fc4 <.L329>
+
+00000eb2 <.L340>:
+                        cur=C[i*N+j];
+     eb2:	014e2383          	lw	t2,20(t3)
+                                ret+=10;
+     eb6:	07a9                	addi	a5,a5,10
+     eb8:	01079e93          	slli	t4,a5,0x10
+     ebc:	410ed513          	srai	a0,t4,0x10
+
+00000ec0 <.LVL150>:
+                                tmp=0;
+     ec0:	4e81                	li	t4,0
+
+00000ec2 <.LVL151>:
+                                ret+=10;
+     ec2:	01051f13          	slli	t5,a0,0x10
+                        tmp+=cur;
+     ec6:	9e9e                	add	t4,t4,t2
+                                ret+=10;
+     ec8:	010f5293          	srli	t0,t5,0x10
+                        if (tmp>clipval) {
+     ecc:	11d65d63          	bge	a2,t4,fe6 <.L331>
+
+00000ed0 <.L341>:
+                        cur=C[i*N+j];
+     ed0:	018e2f83          	lw	t6,24(t3)
+                                ret+=10;
+     ed4:	02a9                	addi	t0,t0,10
+     ed6:	01029e93          	slli	t4,t0,0x10
+     eda:	410edf13          	srai	t5,t4,0x10
+
+00000ede <.LVL152>:
+                                tmp=0;
+     ede:	4e81                	li	t4,0
+
+00000ee0 <.LVL153>:
+                                ret+=10;
+     ee0:	010f1513          	slli	a0,t5,0x10
+                        tmp+=cur;
+     ee4:	9efe                	add	t4,t4,t6
+
+00000ee6 <.LVL154>:
+                                ret+=10;
+     ee6:	01055793          	srli	a5,a0,0x10
+                        if (tmp>clipval) {
+     eea:	11d65f63          	bge	a2,t4,1008 <.L333>
+
+00000eee <.L342>:
+                                ret+=10;
+     eee:	00a78513          	addi	a0,a5,10
+     ef2:	01051793          	slli	a5,a0,0x10
+     ef6:	4107d513          	srai	a0,a5,0x10
+
+00000efa <.LVL156>:
+                                tmp=0;
+     efa:	4e81                	li	t4,0
+
+00000efc <.L334>:
+                for (j=0; j<N; j++) {
+     efc:	0e71                	addi	t3,t3,28
+     efe:	f1c702e3          	beq	a4,t3,e02 <.L321>
+
+00000f02 <.L258>:
+                        cur=C[i*N+j];
+     f02:	000e2383          	lw	t2,0(t3)
+                                ret+=10;
+     f06:	0542                	slli	a0,a0,0x10
+     f08:	01055f13          	srli	t5,a0,0x10
+                        tmp+=cur;
+     f0c:	9e9e                	add	t4,t4,t2
+                        if (tmp>clipval) {
+     f0e:	f1d650e3          	bge	a2,t4,e0e <.L336>
+                                ret+=10;
+     f12:	00af0e93          	addi	t4,t5,10
+                        cur=C[i*N+j];
+     f16:	004e2f83          	lw	t6,4(t3)
+                                ret+=10;
+     f1a:	010e9513          	slli	a0,t4,0x10
+     f1e:	41055f13          	srai	t5,a0,0x10
+
+00000f22 <.LVL159>:
+                                tmp=0;
+     f22:	4e81                	li	t4,0
+
+00000f24 <.LVL160>:
+                                ret+=10;
+     f24:	010f1793          	slli	a5,t5,0x10
+                        tmp+=cur;
+     f28:	01fe8533          	add	a0,t4,t6
+                for (j=0; j<N; j++) {
+     f2c:	0e11                	addi	t3,t3,4
+                                ret+=10;
+     f2e:	0107d293          	srli	t0,a5,0x10
+                        if (tmp>clipval) {
+     f32:	f0a641e3          	blt	a2,a0,e34 <.L284>
+
+00000f36 <.L335>:
+                                ret += (cur>prev) ? 1 : 0;
+     f36:	01f3a3b3          	slt	t2,t2,t6
+     f3a:	00728f33          	add	t5,t0,t2
+                        cur=C[i*N+j];
+     f3e:	004e2383          	lw	t2,4(t3)
+                                ret += (cur>prev) ? 1 : 0;
+     f42:	010f1e93          	slli	t4,t5,0x10
+     f46:	410ed793          	srai	a5,t4,0x10
+                                ret+=10;
+     f4a:	01079f13          	slli	t5,a5,0x10
+                        tmp+=cur;
+     f4e:	00750eb3          	add	t4,a0,t2
+                                ret+=10;
+     f52:	010f5793          	srli	a5,t5,0x10
+                        if (tmp>clipval) {
+     f56:	efd64fe3          	blt	a2,t4,e54 <.L337>
+
+00000f5a <.L323>:
+                                ret += (cur>prev) ? 1 : 0;
+     f5a:	007fafb3          	slt	t6,t6,t2
+     f5e:	01f782b3          	add	t0,a5,t6
+                        cur=C[i*N+j];
+     f62:	008e2f83          	lw	t6,8(t3)
+                                ret += (cur>prev) ? 1 : 0;
+     f66:	01029513          	slli	a0,t0,0x10
+     f6a:	41055f13          	srai	t5,a0,0x10
+                                ret+=10;
+     f6e:	010f1293          	slli	t0,t5,0x10
+                        tmp+=cur;
+     f72:	9efe                	add	t4,t4,t6
+                                ret+=10;
+     f74:	0102d513          	srli	a0,t0,0x10
+                        if (tmp>clipval) {
+     f78:	efd64de3          	blt	a2,t4,e72 <.L338>
+
+00000f7c <.L325>:
+                                ret += (cur>prev) ? 1 : 0;
+     f7c:	01f3a3b3          	slt	t2,t2,t6
+     f80:	00750f33          	add	t5,a0,t2
+                        cur=C[i*N+j];
+     f84:	00ce2383          	lw	t2,12(t3)
+                                ret += (cur>prev) ? 1 : 0;
+     f88:	010f1793          	slli	a5,t5,0x10
+     f8c:	4107d293          	srai	t0,a5,0x10
+                                ret+=10;
+     f90:	01029f13          	slli	t5,t0,0x10
+                        tmp+=cur;
+     f94:	007e82b3          	add	t0,t4,t2
+                                ret+=10;
+     f98:	010f5793          	srli	a5,t5,0x10
+                        if (tmp>clipval) {
+     f9c:	ee564be3          	blt	a2,t0,e92 <.L339>
+
+00000fa0 <.L327>:
+                                ret += (cur>prev) ? 1 : 0;
+     fa0:	007fafb3          	slt	t6,t6,t2
+     fa4:	01f78533          	add	a0,a5,t6
+                        cur=C[i*N+j];
+     fa8:	010e2f83          	lw	t6,16(t3)
+                                ret += (cur>prev) ? 1 : 0;
+     fac:	01051e93          	slli	t4,a0,0x10
+     fb0:	410edf13          	srai	t5,t4,0x10
+                                ret+=10;
+     fb4:	010f1513          	slli	a0,t5,0x10
+                        tmp+=cur;
+     fb8:	01f28eb3          	add	t4,t0,t6
+                                ret+=10;
+     fbc:	01055793          	srli	a5,a0,0x10
+                        if (tmp>clipval) {
+     fc0:	efd649e3          	blt	a2,t4,eb2 <.L340>
+
+00000fc4 <.L329>:
+                                ret += (cur>prev) ? 1 : 0;
+     fc4:	01f3a3b3          	slt	t2,t2,t6
+     fc8:	00778f33          	add	t5,a5,t2
+                        cur=C[i*N+j];
+     fcc:	014e2383          	lw	t2,20(t3)
+                                ret += (cur>prev) ? 1 : 0;
+     fd0:	010f1293          	slli	t0,t5,0x10
+     fd4:	4102d513          	srai	a0,t0,0x10
+                                ret+=10;
+     fd8:	01051f13          	slli	t5,a0,0x10
+                        tmp+=cur;
+     fdc:	9e9e                	add	t4,t4,t2
+                                ret+=10;
+     fde:	010f5293          	srli	t0,t5,0x10
+                        if (tmp>clipval) {
+     fe2:	efd647e3          	blt	a2,t4,ed0 <.L341>
+
+00000fe6 <.L331>:
+                                ret += (cur>prev) ? 1 : 0;
+     fe6:	007fafb3          	slt	t6,t6,t2
+     fea:	01f28533          	add	a0,t0,t6
+                        cur=C[i*N+j];
+     fee:	018e2f83          	lw	t6,24(t3)
+                                ret += (cur>prev) ? 1 : 0;
+     ff2:	01051793          	slli	a5,a0,0x10
+     ff6:	4107df13          	srai	t5,a5,0x10
+
+00000ffa <.LVL161>:
+                                ret+=10;
+     ffa:	010f1513          	slli	a0,t5,0x10
+                        tmp+=cur;
+     ffe:	9efe                	add	t4,t4,t6
+
+00001000 <.LVL162>:
+                                ret+=10;
+    1000:	01055793          	srli	a5,a0,0x10
+                        if (tmp>clipval) {
+    1004:	efd645e3          	blt	a2,t4,eee <.L342>
+
+00001008 <.L333>:
+                                ret += (cur>prev) ? 1 : 0;
+    1008:	01f3a3b3          	slt	t2,t2,t6
+    100c:	00778f33          	add	t5,a5,t2
+    1010:	010f1293          	slli	t0,t5,0x10
+    1014:	4102d513          	srai	a0,t0,0x10
+    1018:	b5d5                	j	efc <.L334>
+
+0000101a <.L319>:
+    101a:	01ff23b3          	slt	t2,t5,t6
+    101e:	007507b3          	add	a5,a0,t2
+
+00001022 <.LVL163>:
+    1022:	01079f13          	slli	t5,a5,0x10
+    1026:	410f5513          	srai	a0,t5,0x10
+    102a:	bbc9                	j	dfc <.L320>
+
+0000102c <.L317>:
+    102c:	01f3a2b3          	slt	t0,t2,t6
+    1030:	005f0533          	add	a0,t5,t0
+
+00001034 <.LVL165>:
+    1034:	01051393          	slli	t2,a0,0x10
+    1038:	4103d513          	srai	a0,t2,0x10
+
+0000103c <.LVL166>:
+    103c:	bb71                	j	dd8 <.L318>
+
+0000103e <.L315>:
+    103e:	01f2a7b3          	slt	a5,t0,t6
+    1042:	00f38f33          	add	t5,t2,a5
+
+00001046 <.LVL168>:
+    1046:	010f1293          	slli	t0,t5,0x10
+    104a:	4102d513          	srai	a0,t0,0x10
+    104e:	b39d                	j	db4 <.L316>
+
+00001050 <.L313>:
+    1050:	01f3a2b3          	slt	t0,t2,t6
+    1054:	005507b3          	add	a5,a0,t0
+
+00001058 <.LVL170>:
+    1058:	01079393          	slli	t2,a5,0x10
+    105c:	4103d513          	srai	a0,t2,0x10
+    1060:	bb15                	j	d94 <.L314>
+
+00001062 <.L311>:
+    1062:	01f2af33          	slt	t5,t0,t6
+    1066:	01e38533          	add	a0,t2,t5
+
+0000106a <.LVL172>:
+    106a:	01051293          	slli	t0,a0,0x10
+    106e:	4102d513          	srai	a0,t0,0x10
+
+00001072 <.LVL173>:
+    1072:	b9fd                	j	d70 <.L312>
+
+00001074 <.L309>:
+    1074:	01ff27b3          	slt	a5,t5,t6
+    1078:	00f283b3          	add	t2,t0,a5
+
+0000107c <.LVL175>:
+    107c:	01039f13          	slli	t5,t2,0x10
+    1080:	410f5513          	srai	a0,t5,0x10
+    1084:	b1e1                	j	d4c <.L310>
+
+00001086 <.L307>:
+    1086:	01fe27b3          	slt	a5,t3,t6
+    108a:	00ff02b3          	add	t0,t5,a5
+
+0000108e <.LVL177>:
+    108e:	01029393          	slli	t2,t0,0x10
+    1092:	4103d513          	srai	a0,t2,0x10
+    1096:	b951                	j	d2a <.L308>
+
+00001098 <.L260>:
+        ee_s16 ret=0;
+    1098:	4501                	li	a0,0
+
+0000109a <.LVL179>:
+}
+    109a:	8082                	ret
+
+0000109c <matrix_mul_const>:
+        for (i=0; i<N; i++) {
+    109c:	16050163          	beqz	a0,11fe <.L382>
+void matrix_mul_const(ee_u32 N, MATRES *C, MATDAT *A, MATDAT val) {
+    10a0:	1141                	addi	sp,sp,-16
+    10a2:	40a003b3          	neg	t2,a0
+    10a6:	00151813          	slli	a6,a0,0x1
+    10aa:	c622                	sw	s0,12(sp)
+    10ac:	c426                	sw	s1,8(sp)
+    10ae:	00139413          	slli	s0,t2,0x1
+    10b2:	c24a                	sw	s2,4(sp)
+    10b4:	c04e                	sw	s3,0(sp)
+    10b6:	9832                	add	a6,a6,a2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    10b8:	4f81                	li	t6,0
+        for (i=0; i<N; i++) {
+    10ba:	4281                	li	t0,0
+    10bc:	038a                	slli	t2,t2,0x2
+
+000010be <.L345>:
+                for (j=0; j<N; j++) {
+    10be:	010408b3          	add	a7,s0,a6
+    10c2:	41180633          	sub	a2,a6,a7
+    10c6:	ffe60313          	addi	t1,a2,-2
+    10ca:	00135493          	srli	s1,t1,0x1
+    10ce:	00148713          	addi	a4,s1,1
+    10d2:	002f9793          	slli	a5,t6,0x2
+    10d6:	00777913          	andi	s2,a4,7
+    10da:	97ae                	add	a5,a5,a1
+void matrix_mul_const(ee_u32 N, MATRES *C, MATDAT *A, MATDAT val) {
+    10dc:	8746                	mv	a4,a7
+    10de:	08090f63          	beqz	s2,117c <.L346>
+    10e2:	4985                	li	s3,1
+    10e4:	09390263          	beq	s2,s3,1168 <.L371>
+    10e8:	4e09                	li	t3,2
+    10ea:	07c90763          	beq	s2,t3,1158 <.L372>
+    10ee:	4e8d                	li	t4,3
+    10f0:	05d90c63          	beq	s2,t4,1148 <.L373>
+    10f4:	4f11                	li	t5,4
+    10f6:	05e90163          	beq	s2,t5,1138 <.L374>
+    10fa:	4615                	li	a2,5
+    10fc:	02c90663          	beq	s2,a2,1128 <.L375>
+    1100:	4319                	li	t1,6
+    1102:	00690b63          	beq	s2,t1,1118 <.L376>
+
+00001106 <.LVL182>:
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    1106:	00089483          	lh	s1,0(a7)
+                for (j=0; j<N; j++) {
+    110a:	00288713          	addi	a4,a7,2
+    110e:	0791                	addi	a5,a5,4
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    1110:	02d48933          	mul	s2,s1,a3
+    1114:	ff27ae23          	sw	s2,-4(a5)
+
+00001118 <.L376>:
+    1118:	00071983          	lh	s3,0(a4)
+                for (j=0; j<N; j++) {
+    111c:	0791                	addi	a5,a5,4
+    111e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    1120:	02d98e33          	mul	t3,s3,a3
+    1124:	ffc7ae23          	sw	t3,-4(a5)
+
+00001128 <.L375>:
+    1128:	00071e83          	lh	t4,0(a4)
+                for (j=0; j<N; j++) {
+    112c:	0791                	addi	a5,a5,4
+    112e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    1130:	02de8f33          	mul	t5,t4,a3
+    1134:	ffe7ae23          	sw	t5,-4(a5)
+
+00001138 <.L374>:
+    1138:	00071603          	lh	a2,0(a4)
+                for (j=0; j<N; j++) {
+    113c:	0791                	addi	a5,a5,4
+    113e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    1140:	02d60333          	mul	t1,a2,a3
+    1144:	fe67ae23          	sw	t1,-4(a5)
+
+00001148 <.L373>:
+    1148:	00071483          	lh	s1,0(a4)
+                for (j=0; j<N; j++) {
+    114c:	0791                	addi	a5,a5,4
+    114e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    1150:	02d48933          	mul	s2,s1,a3
+    1154:	ff27ae23          	sw	s2,-4(a5)
+
+00001158 <.L372>:
+    1158:	00071983          	lh	s3,0(a4)
+                for (j=0; j<N; j++) {
+    115c:	0791                	addi	a5,a5,4
+    115e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    1160:	02d98e33          	mul	t3,s3,a3
+    1164:	ffc7ae23          	sw	t3,-4(a5)
+
+00001168 <.L371>:
+    1168:	00071e83          	lh	t4,0(a4)
+                for (j=0; j<N; j++) {
+    116c:	0791                	addi	a5,a5,4
+    116e:	0709                	addi	a4,a4,2
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    1170:	02de8f33          	mul	t5,t4,a3
+    1174:	ffe7ae23          	sw	t5,-4(a5)
+                for (j=0; j<N; j++) {
+    1178:	06e80763          	beq	a6,a4,11e6 <.L380>
+
+0000117c <.L346>:
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    117c:	00071983          	lh	s3,0(a4)
+    1180:	00271903          	lh	s2,2(a4)
+    1184:	00471483          	lh	s1,4(a4)
+    1188:	00671f03          	lh	t5,6(a4)
+    118c:	00871e83          	lh	t4,8(a4)
+    1190:	00a71e03          	lh	t3,10(a4)
+    1194:	00c71303          	lh	t1,12(a4)
+    1198:	00e71603          	lh	a2,14(a4)
+    119c:	02d989b3          	mul	s3,s3,a3
+                for (j=0; j<N; j++) {
+    11a0:	0741                	addi	a4,a4,16
+    11a2:	02078793          	addi	a5,a5,32
+                        C[i*N+j]=(MATRES)A[i*N+j] * (MATRES)val;
+    11a6:	02d90933          	mul	s2,s2,a3
+    11aa:	ff37a023          	sw	s3,-32(a5)
+    11ae:	02d484b3          	mul	s1,s1,a3
+    11b2:	ff27a223          	sw	s2,-28(a5)
+    11b6:	02df0f33          	mul	t5,t5,a3
+    11ba:	fe97a423          	sw	s1,-24(a5)
+    11be:	02de8eb3          	mul	t4,t4,a3
+    11c2:	ffe7a623          	sw	t5,-20(a5)
+    11c6:	02de0e33          	mul	t3,t3,a3
+    11ca:	ffd7a823          	sw	t4,-16(a5)
+    11ce:	02d30333          	mul	t1,t1,a3
+    11d2:	ffc7aa23          	sw	t3,-12(a5)
+    11d6:	02d60633          	mul	a2,a2,a3
+    11da:	fe67ac23          	sw	t1,-8(a5)
+    11de:	fec7ae23          	sw	a2,-4(a5)
+                for (j=0; j<N; j++) {
+    11e2:	f8e81de3          	bne	a6,a4,117c <.L346>
+
+000011e6 <.L380>:
+        for (i=0; i<N; i++) {
+    11e6:	0285                	addi	t0,t0,1
+    11e8:	9faa                	add	t6,t6,a0
+    11ea:	40788833          	sub	a6,a7,t2
+    11ee:	ec5518e3          	bne	a0,t0,10be <.L345>
+}
+    11f2:	4432                	lw	s0,12(sp)
+    11f4:	44a2                	lw	s1,8(sp)
+    11f6:	4912                	lw	s2,4(sp)
+    11f8:	4982                	lw	s3,0(sp)
+    11fa:	0141                	addi	sp,sp,16
+    11fc:	8082                	ret
+
+000011fe <.L382>:
+    11fe:	8082                	ret
+
+00001200 <matrix_add_const>:
+        for (i=0; i<N; i++) {
+    1200:	1e050063          	beqz	a0,13e0 <.L424>
+    1204:	40a002b3          	neg	t0,a0
+                        A[i*N+j] += val;
+    1208:	01061693          	slli	a3,a2,0x10
+    120c:	00151793          	slli	a5,a0,0x1
+    1210:	00129393          	slli	t2,t0,0x1
+    1214:	82c1                	srli	a3,a3,0x10
+    1216:	00f58633          	add	a2,a1,a5
+
+0000121a <.LVL186>:
+        for (i=0; i<N; i++) {
+    121a:	4f81                	li	t6,0
+    121c:	028a                	slli	t0,t0,0x2
+
+0000121e <.L425>:
+                for (j=0; j<N; j++) {
+    121e:	00c385b3          	add	a1,t2,a2
+    1222:	40b60733          	sub	a4,a2,a1
+    1226:	ffe70313          	addi	t1,a4,-2
+    122a:	00135813          	srli	a6,t1,0x1
+    122e:	00180893          	addi	a7,a6,1
+    1232:	0078fe13          	andi	t3,a7,7
+void matrix_add_const(ee_u32 N, MATDAT *A, MATDAT val) {
+    1236:	87ae                	mv	a5,a1
+    1238:	080e0863          	beqz	t3,12c8 <.L442>
+    123c:	4e85                	li	t4,1
+    123e:	07de0c63          	beq	t3,t4,12b6 <.L428>
+    1242:	4f09                	li	t5,2
+    1244:	07ee0263          	beq	t3,t5,12a8 <.L430>
+    1248:	470d                	li	a4,3
+    124a:	04ee0863          	beq	t3,a4,129a <.L432>
+    124e:	4311                	li	t1,4
+    1250:	026e0e63          	beq	t3,t1,128c <.L434>
+    1254:	4815                	li	a6,5
+    1256:	030e0463          	beq	t3,a6,127e <.L436>
+    125a:	4899                	li	a7,6
+    125c:	011e0a63          	beq	t3,a7,1270 <.L438>
+
+00001260 <.LVL188>:
+                        A[i*N+j] += val;
+    1260:	0005de03          	lhu	t3,0(a1)
+                for (j=0; j<N; j++) {
+    1264:	00258793          	addi	a5,a1,2
+                        A[i*N+j] += val;
+    1268:	01c68eb3          	add	t4,a3,t3
+    126c:	01d59023          	sh	t4,0(a1)
+
+00001270 <.L438>:
+    1270:	0007df03          	lhu	t5,0(a5)
+                for (j=0; j<N; j++) {
+    1274:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    1276:	01e68733          	add	a4,a3,t5
+    127a:	fee79f23          	sh	a4,-2(a5)
+
+0000127e <.L436>:
+    127e:	0007d303          	lhu	t1,0(a5)
+                for (j=0; j<N; j++) {
+    1282:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    1284:	00668833          	add	a6,a3,t1
+    1288:	ff079f23          	sh	a6,-2(a5)
+
+0000128c <.L434>:
+    128c:	0007d883          	lhu	a7,0(a5)
+                for (j=0; j<N; j++) {
+    1290:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    1292:	01168e33          	add	t3,a3,a7
+    1296:	ffc79f23          	sh	t3,-2(a5)
+
+0000129a <.L432>:
+    129a:	0007de83          	lhu	t4,0(a5)
+                for (j=0; j<N; j++) {
+    129e:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    12a0:	01d68f33          	add	t5,a3,t4
+    12a4:	ffe79f23          	sh	t5,-2(a5)
+
+000012a8 <.L430>:
+    12a8:	0007d703          	lhu	a4,0(a5)
+                for (j=0; j<N; j++) {
+    12ac:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    12ae:	00e68333          	add	t1,a3,a4
+    12b2:	fe679f23          	sh	t1,-2(a5)
+
+000012b6 <.L428>:
+    12b6:	0007d803          	lhu	a6,0(a5)
+                for (j=0; j<N; j++) {
+    12ba:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    12bc:	010688b3          	add	a7,a3,a6
+    12c0:	ff179f23          	sh	a7,-2(a5)
+                for (j=0; j<N; j++) {
+    12c4:	10f60963          	beq	a2,a5,13d6 <.L441>
+
+000012c8 <.L442>:
+void matrix_add_const(ee_u32 N, MATDAT *A, MATDAT val) {
+    12c8:	1141                	addi	sp,sp,-16
+    12ca:	c622                	sw	s0,12(sp)
+
+000012cc <.L388>:
+                        A[i*N+j] += val;
+    12cc:	0007d403          	lhu	s0,0(a5)
+    12d0:	0027df03          	lhu	t5,2(a5)
+    12d4:	0047de83          	lhu	t4,4(a5)
+    12d8:	0067de03          	lhu	t3,6(a5)
+    12dc:	0087d303          	lhu	t1,8(a5)
+    12e0:	00a7d883          	lhu	a7,10(a5)
+    12e4:	00c7d803          	lhu	a6,12(a5)
+    12e8:	00e7d703          	lhu	a4,14(a5)
+    12ec:	9436                	add	s0,s0,a3
+    12ee:	9f36                	add	t5,t5,a3
+    12f0:	9eb6                	add	t4,t4,a3
+    12f2:	9e36                	add	t3,t3,a3
+    12f4:	9336                	add	t1,t1,a3
+    12f6:	98b6                	add	a7,a7,a3
+    12f8:	9836                	add	a6,a6,a3
+    12fa:	9736                	add	a4,a4,a3
+    12fc:	00879023          	sh	s0,0(a5)
+    1300:	01e79123          	sh	t5,2(a5)
+    1304:	01d79223          	sh	t4,4(a5)
+    1308:	01c79323          	sh	t3,6(a5)
+    130c:	00679423          	sh	t1,8(a5)
+    1310:	01179523          	sh	a7,10(a5)
+    1314:	01079623          	sh	a6,12(a5)
+    1318:	00e79723          	sh	a4,14(a5)
+                for (j=0; j<N; j++) {
+    131c:	07c1                	addi	a5,a5,16
+    131e:	faf617e3          	bne	a2,a5,12cc <.L388>
+        for (i=0; i<N; i++) {
+    1322:	0f85                	addi	t6,t6,1
+    1324:	40558633          	sub	a2,a1,t0
+    1328:	0bf50463          	beq	a0,t6,13d0 <.L385>
+
+0000132c <.L444>:
+                for (j=0; j<N; j++) {
+    132c:	00c385b3          	add	a1,t2,a2
+    1330:	40b607b3          	sub	a5,a2,a1
+    1334:	ffe78413          	addi	s0,a5,-2
+    1338:	00145f13          	srli	t5,s0,0x1
+    133c:	001f0e93          	addi	t4,t5,1
+    1340:	007efe13          	andi	t3,t4,7
+void matrix_add_const(ee_u32 N, MATDAT *A, MATDAT val) {
+    1344:	87ae                	mv	a5,a1
+    1346:	f80e03e3          	beqz	t3,12cc <.L388>
+    134a:	4305                	li	t1,1
+    134c:	066e0463          	beq	t3,t1,13b4 <.L413>
+    1350:	4889                	li	a7,2
+    1352:	051e0a63          	beq	t3,a7,13a6 <.L414>
+    1356:	480d                	li	a6,3
+    1358:	050e0063          	beq	t3,a6,1398 <.L415>
+    135c:	4711                	li	a4,4
+    135e:	02ee0663          	beq	t3,a4,138a <.L416>
+    1362:	4415                	li	s0,5
+    1364:	008e0c63          	beq	t3,s0,137c <.L417>
+    1368:	4f19                	li	t5,6
+    136a:	07ee1c63          	bne	t3,t5,13e2 <.L443>
+
+0000136e <.L418>:
+                        A[i*N+j] += val;
+    136e:	0007d303          	lhu	t1,0(a5)
+                for (j=0; j<N; j++) {
+    1372:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    1374:	006688b3          	add	a7,a3,t1
+    1378:	ff179f23          	sh	a7,-2(a5)
+
+0000137c <.L417>:
+    137c:	0007d803          	lhu	a6,0(a5)
+                for (j=0; j<N; j++) {
+    1380:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    1382:	01068733          	add	a4,a3,a6
+    1386:	fee79f23          	sh	a4,-2(a5)
+
+0000138a <.L416>:
+    138a:	0007d403          	lhu	s0,0(a5)
+                for (j=0; j<N; j++) {
+    138e:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    1390:	00868f33          	add	t5,a3,s0
+    1394:	ffe79f23          	sh	t5,-2(a5)
+
+00001398 <.L415>:
+    1398:	0007de83          	lhu	t4,0(a5)
+                for (j=0; j<N; j++) {
+    139c:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    139e:	01d68e33          	add	t3,a3,t4
+    13a2:	ffc79f23          	sh	t3,-2(a5)
+
+000013a6 <.L414>:
+    13a6:	0007d303          	lhu	t1,0(a5)
+                for (j=0; j<N; j++) {
+    13aa:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    13ac:	006688b3          	add	a7,a3,t1
+    13b0:	ff179f23          	sh	a7,-2(a5)
+
+000013b4 <.L413>:
+    13b4:	0007d803          	lhu	a6,0(a5)
+                for (j=0; j<N; j++) {
+    13b8:	0789                	addi	a5,a5,2
+                        A[i*N+j] += val;
+    13ba:	01068733          	add	a4,a3,a6
+    13be:	fee79f23          	sh	a4,-2(a5)
+                for (j=0; j<N; j++) {
+    13c2:	f0f615e3          	bne	a2,a5,12cc <.L388>
+        for (i=0; i<N; i++) {
+    13c6:	0f85                	addi	t6,t6,1
+    13c8:	40558633          	sub	a2,a1,t0
+    13cc:	f7f510e3          	bne	a0,t6,132c <.L444>
+
+000013d0 <.L385>:
+}
+    13d0:	4432                	lw	s0,12(sp)
+    13d2:	0141                	addi	sp,sp,16
+    13d4:	8082                	ret
+
+000013d6 <.L441>:
+        for (i=0; i<N; i++) {
+    13d6:	0f85                	addi	t6,t6,1
+    13d8:	40558633          	sub	a2,a1,t0
+    13dc:	e5f511e3          	bne	a0,t6,121e <.L425>
+
+000013e0 <.L424>:
+    13e0:	8082                	ret
+
+000013e2 <.L443>:
+                        A[i*N+j] += val;
+    13e2:	0005de83          	lhu	t4,0(a1)
+                for (j=0; j<N; j++) {
+    13e6:	00258793          	addi	a5,a1,2
+                        A[i*N+j] += val;
+    13ea:	01d68e33          	add	t3,a3,t4
+    13ee:	01c59023          	sh	t3,0(a1)
+                for (j=0; j<N; j++) {
+    13f2:	bfb5                	j	136e <.L418>
+
+000013f4 <matrix_mul_vect>:
+        for (i=0; i<N; i++) {
+    13f4:	1a050863          	beqz	a0,15a4 <.L483>
+void matrix_mul_vect(ee_u32 N, MATRES *C, MATDAT *A, MATDAT *B) {
+    13f8:	7179                	addi	sp,sp,-48
+    13fa:	d226                	sw	s1,36(sp)
+    13fc:	84aa                	mv	s1,a0
+    13fe:	ce4e                	sw	s3,28(sp)
+                C[i]=0;
+    1400:	00249993          	slli	s3,s1,0x2
+void matrix_mul_vect(ee_u32 N, MATRES *C, MATDAT *A, MATDAT *B) {
+    1404:	d04a                	sw	s2,32(sp)
+    1406:	852e                	mv	a0,a1
+
+00001408 <.LVL197>:
+    1408:	8932                	mv	s2,a2
+                C[i]=0;
+    140a:	4581                	li	a1,0
+
+0000140c <.LVL198>:
+    140c:	864e                	mv	a2,s3
+
+0000140e <.LVL199>:
+void matrix_mul_vect(ee_u32 N, MATRES *C, MATDAT *A, MATDAT *B) {
+    140e:	d422                	sw	s0,40(sp)
+    1410:	d606                	sw	ra,44(sp)
+    1412:	8436                	mv	s0,a3
+    1414:	cc52                	sw	s4,24(sp)
+    1416:	ca56                	sw	s5,20(sp)
+    1418:	c85a                	sw	s6,16(sp)
+    141a:	c65e                	sw	s7,12(sp)
+    141c:	c462                	sw	s8,8(sp)
+    141e:	c266                	sw	s9,4(sp)
+                C[i]=0;
+    1420:	68f000ef          	jal	ra,22ae <memset>
+
+00001424 <.LVL200>:
+    1424:	00149693          	slli	a3,s1,0x1
+    1428:	85aa                	mv	a1,a0
+    142a:	96a2                	add	a3,a3,s0
+    142c:	954e                	add	a0,a0,s3
+    142e:	4601                	li	a2,0
+
+00001430 <.L448>:
+                for (j=0; j<N; j++) {
+    1430:	40868333          	sub	t1,a3,s0
+    1434:	ffe30093          	addi	ra,t1,-2
+    1438:	0010d293          	srli	t0,ra,0x1
+    143c:	00128393          	addi	t2,t0,1
+    1440:	00161793          	slli	a5,a2,0x1
+    1444:	0073f893          	andi	a7,t2,7
+    1448:	97ca                	add	a5,a5,s2
+                C[i]=0;
+    144a:	8722                	mv	a4,s0
+    144c:	4e01                	li	t3,0
+    144e:	0a088563          	beqz	a7,14f8 <.L447>
+    1452:	4805                	li	a6,1
+    1454:	09088763          	beq	a7,a6,14e2 <.L473>
+    1458:	4a09                	li	s4,2
+    145a:	07488b63          	beq	a7,s4,14d0 <.L474>
+    145e:	4a8d                	li	s5,3
+    1460:	05588f63          	beq	a7,s5,14be <.L475>
+    1464:	4b11                	li	s6,4
+    1466:	05688363          	beq	a7,s6,14ac <.L476>
+    146a:	4b95                	li	s7,5
+    146c:	03788763          	beq	a7,s7,149a <.L477>
+    1470:	4c19                	li	s8,6
+    1472:	01888b63          	beq	a7,s8,1488 <.L478>
+
+00001476 <.LVL202>:
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    1476:	00079c83          	lh	s9,0(a5)
+    147a:	00041e03          	lh	t3,0(s0)
+                for (j=0; j<N; j++) {
+    147e:	0789                	addi	a5,a5,2
+    1480:	00240713          	addi	a4,s0,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    1484:	03cc8e33          	mul	t3,s9,t3
+
+00001488 <.L478>:
+    1488:	00079e83          	lh	t4,0(a5)
+    148c:	00071f03          	lh	t5,0(a4)
+                for (j=0; j<N; j++) {
+    1490:	0789                	addi	a5,a5,2
+    1492:	0709                	addi	a4,a4,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    1494:	03ee8fb3          	mul	t6,t4,t5
+    1498:	9e7e                	add	t3,t3,t6
+
+0000149a <.L477>:
+    149a:	00079983          	lh	s3,0(a5)
+    149e:	00071303          	lh	t1,0(a4)
+                for (j=0; j<N; j++) {
+    14a2:	0789                	addi	a5,a5,2
+    14a4:	0709                	addi	a4,a4,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    14a6:	026980b3          	mul	ra,s3,t1
+    14aa:	9e06                	add	t3,t3,ra
+
+000014ac <.L476>:
+    14ac:	00079283          	lh	t0,0(a5)
+    14b0:	00071383          	lh	t2,0(a4)
+                for (j=0; j<N; j++) {
+    14b4:	0789                	addi	a5,a5,2
+    14b6:	0709                	addi	a4,a4,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    14b8:	027288b3          	mul	a7,t0,t2
+    14bc:	9e46                	add	t3,t3,a7
+
+000014be <.L475>:
+    14be:	00079803          	lh	a6,0(a5)
+    14c2:	00071a03          	lh	s4,0(a4)
+                for (j=0; j<N; j++) {
+    14c6:	0789                	addi	a5,a5,2
+    14c8:	0709                	addi	a4,a4,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    14ca:	03480ab3          	mul	s5,a6,s4
+    14ce:	9e56                	add	t3,t3,s5
+
+000014d0 <.L474>:
+    14d0:	00079b03          	lh	s6,0(a5)
+    14d4:	00071b83          	lh	s7,0(a4)
+                for (j=0; j<N; j++) {
+    14d8:	0789                	addi	a5,a5,2
+    14da:	0709                	addi	a4,a4,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    14dc:	037b0c33          	mul	s8,s6,s7
+    14e0:	9e62                	add	t3,t3,s8
+
+000014e2 <.L473>:
+    14e2:	00079c83          	lh	s9,0(a5)
+    14e6:	00071e83          	lh	t4,0(a4)
+                for (j=0; j<N; j++) {
+    14ea:	0709                	addi	a4,a4,2
+    14ec:	0789                	addi	a5,a5,2
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    14ee:	03dc8f33          	mul	t5,s9,t4
+    14f2:	9e7a                	add	t3,t3,t5
+                for (j=0; j<N; j++) {
+    14f4:	08e68563          	beq	a3,a4,157e <.L481>
+
+000014f8 <.L447>:
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    14f8:	00079f83          	lh	t6,0(a5)
+    14fc:	00071983          	lh	s3,0(a4)
+    1500:	00279083          	lh	ra,2(a5)
+    1504:	00271a83          	lh	s5,2(a4)
+    1508:	033f88b3          	mul	a7,t6,s3
+    150c:	00479803          	lh	a6,4(a5)
+    1510:	00471c03          	lh	s8,4(a4)
+    1514:	00679283          	lh	t0,6(a5)
+    1518:	00671b83          	lh	s7,6(a4)
+    151c:	00879c83          	lh	s9,8(a5)
+    1520:	00871b03          	lh	s6,8(a4)
+    1524:	00a79f03          	lh	t5,10(a5)
+    1528:	00a71a03          	lh	s4,10(a4)
+    152c:	00c79e83          	lh	t4,12(a5)
+    1530:	03508fb3          	mul	t6,ra,s5
+    1534:	00c71983          	lh	s3,12(a4)
+    1538:	00e79303          	lh	t1,14(a5)
+    153c:	00e71383          	lh	t2,14(a4)
+    1540:	9e46                	add	t3,t3,a7
+                for (j=0; j<N; j++) {
+    1542:	0741                	addi	a4,a4,16
+    1544:	07c1                	addi	a5,a5,16
+                        C[i]+=(MATRES)A[i*N+j] * (MATRES)B[j];
+    1546:	038800b3          	mul	ra,a6,s8
+    154a:	01fe0ab3          	add	s5,t3,t6
+    154e:	03728c33          	mul	s8,t0,s7
+    1552:	001a8833          	add	a6,s5,ra
+    1556:	036c82b3          	mul	t0,s9,s6
+    155a:	01880bb3          	add	s7,a6,s8
+    155e:	034f08b3          	mul	a7,t5,s4
+    1562:	005b8cb3          	add	s9,s7,t0
+    1566:	033e8b33          	mul	s6,t4,s3
+    156a:	011c8f33          	add	t5,s9,a7
+    156e:	02730a33          	mul	s4,t1,t2
+    1572:	016f0eb3          	add	t4,t5,s6
+    1576:	014e8e33          	add	t3,t4,s4
+                for (j=0; j<N; j++) {
+    157a:	f6e69fe3          	bne	a3,a4,14f8 <.L447>
+
+0000157e <.L481>:
+    157e:	01c5a023          	sw	t3,0(a1)
+        for (i=0; i<N; i++) {
+    1582:	0591                	addi	a1,a1,4
+    1584:	9626                	add	a2,a2,s1
+    1586:	eab515e3          	bne	a0,a1,1430 <.L448>
+}
+    158a:	50b2                	lw	ra,44(sp)
+    158c:	5422                	lw	s0,40(sp)
+
+0000158e <.LVL203>:
+    158e:	5492                	lw	s1,36(sp)
+
+00001590 <.LVL204>:
+    1590:	5902                	lw	s2,32(sp)
+
+00001592 <.LVL205>:
+    1592:	49f2                	lw	s3,28(sp)
+    1594:	4a62                	lw	s4,24(sp)
+    1596:	4ad2                	lw	s5,20(sp)
+    1598:	4b42                	lw	s6,16(sp)
+    159a:	4bb2                	lw	s7,12(sp)
+    159c:	4c22                	lw	s8,8(sp)
+    159e:	4c92                	lw	s9,4(sp)
+    15a0:	6145                	addi	sp,sp,48
+    15a2:	8082                	ret
+
+000015a4 <.L483>:
+    15a4:	8082                	ret
+
+000015a6 <matrix_mul_matrix>:
+void matrix_mul_matrix(ee_u32 N, MATRES *C, MATDAT *A, MATDAT *B) {
+    15a6:	715d                	addi	sp,sp,-80
+    15a8:	c686                	sw	ra,76(sp)
+    15aa:	c4a2                	sw	s0,72(sp)
+    15ac:	c2a6                	sw	s1,68(sp)
+    15ae:	c0ca                	sw	s2,64(sp)
+    15b0:	de4e                	sw	s3,60(sp)
+    15b2:	dc52                	sw	s4,56(sp)
+    15b4:	da56                	sw	s5,52(sp)
+    15b6:	d85a                	sw	s6,48(sp)
+    15b8:	d65e                	sw	s7,44(sp)
+    15ba:	d462                	sw	s8,40(sp)
+    15bc:	d266                	sw	s9,36(sp)
+    15be:	d06a                	sw	s10,32(sp)
+    15c0:	ce6e                	sw	s11,28(sp)
+    15c2:	c42e                	sw	a1,8(sp)
+    15c4:	c636                	sw	a3,12(sp)
+        for (i=0; i<N; i++) {
+    15c6:	1a050f63          	beqz	a0,1784 <.L486>
+    15ca:	00151413          	slli	s0,a0,0x1
+    15ce:	8aaa                	mv	s5,a0
+    15d0:	89b2                	mv	s3,a2
+    15d2:	00860933          	add	s2,a2,s0
+                        C[i*N+j]=0;
+    15d6:	00251493          	slli	s1,a0,0x2
+    15da:	4b01                	li	s6,0
+        for (i=0; i<N; i++) {
+    15dc:	4b81                	li	s7,0
+
+000015de <.L488>:
+                for (j=0; j<N; j++) {
+    15de:	47a2                	lw	a5,8(sp)
+    15e0:	002b1f13          	slli	t5,s6,0x2
+                        C[i*N+j]=0;
+    15e4:	8626                	mv	a2,s1
+    15e6:	01e78533          	add	a0,a5,t5
+    15ea:	4581                	li	a1,0
+    15ec:	4c3000ef          	jal	ra,22ae <memset>
+
+000015f0 <.LVL209>:
+    15f0:	4632                	lw	a2,12(sp)
+    15f2:	8f2a                	mv	t5,a0
+                for (j=0; j<N; j++) {
+    15f4:	4f81                	li	t6,0
+
+000015f6 <.L490>:
+                        for(k=0;k<N;k++)
+    15f6:	41390733          	sub	a4,s2,s3
+    15fa:	ffe70093          	addi	ra,a4,-2
+    15fe:	0010d293          	srli	t0,ra,0x1
+    1602:	00128313          	addi	t1,t0,1
+    1606:	00737393          	andi	t2,t1,7
+    160a:	85b2                	mv	a1,a2
+    160c:	86ce                	mv	a3,s3
+    160e:	4781                	li	a5,0
+    1610:	0a038663          	beqz	t2,16bc <.L489>
+    1614:	4805                	li	a6,1
+    1616:	09038863          	beq	t2,a6,16a6 <.L516>
+    161a:	4889                	li	a7,2
+    161c:	07138c63          	beq	t2,a7,1694 <.L517>
+    1620:	4a0d                	li	s4,3
+    1622:	07438063          	beq	t2,s4,1682 <.L518>
+    1626:	4c11                	li	s8,4
+    1628:	05838463          	beq	t2,s8,1670 <.L519>
+    162c:	4c95                	li	s9,5
+    162e:	03938863          	beq	t2,s9,165e <.L520>
+    1632:	4d19                	li	s10,6
+    1634:	01a38c63          	beq	t2,s10,164c <.L521>
+
+00001638 <.LVL211>:
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    1638:	00099d83          	lh	s11,0(s3)
+    163c:	00061e03          	lh	t3,0(a2)
+                        for(k=0;k<N;k++)
+    1640:	00298693          	addi	a3,s3,2
+    1644:	008605b3          	add	a1,a2,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    1648:	03cd87b3          	mul	a5,s11,t3
+
+0000164c <.L521>:
+    164c:	00069e83          	lh	t4,0(a3)
+    1650:	00059503          	lh	a0,0(a1)
+                        for(k=0;k<N;k++)
+    1654:	0689                	addi	a3,a3,2
+    1656:	95a2                	add	a1,a1,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    1658:	02ae8733          	mul	a4,t4,a0
+    165c:	97ba                	add	a5,a5,a4
+
+0000165e <.L520>:
+    165e:	00069083          	lh	ra,0(a3)
+    1662:	00059283          	lh	t0,0(a1)
+                        for(k=0;k<N;k++)
+    1666:	0689                	addi	a3,a3,2
+    1668:	95a2                	add	a1,a1,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    166a:	02508333          	mul	t1,ra,t0
+    166e:	979a                	add	a5,a5,t1
+
+00001670 <.L519>:
+    1670:	00069383          	lh	t2,0(a3)
+    1674:	00059803          	lh	a6,0(a1)
+                        for(k=0;k<N;k++)
+    1678:	0689                	addi	a3,a3,2
+    167a:	95a2                	add	a1,a1,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    167c:	030388b3          	mul	a7,t2,a6
+    1680:	97c6                	add	a5,a5,a7
+
+00001682 <.L518>:
+    1682:	00069a03          	lh	s4,0(a3)
+    1686:	00059c03          	lh	s8,0(a1)
+                        for(k=0;k<N;k++)
+    168a:	0689                	addi	a3,a3,2
+    168c:	95a2                	add	a1,a1,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    168e:	038a0cb3          	mul	s9,s4,s8
+    1692:	97e6                	add	a5,a5,s9
+
+00001694 <.L517>:
+    1694:	00069d03          	lh	s10,0(a3)
+    1698:	00059d83          	lh	s11,0(a1)
+                        for(k=0;k<N;k++)
+    169c:	0689                	addi	a3,a3,2
+    169e:	95a2                	add	a1,a1,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    16a0:	03bd0e33          	mul	t3,s10,s11
+    16a4:	97f2                	add	a5,a5,t3
+
+000016a6 <.L516>:
+    16a6:	00069e83          	lh	t4,0(a3)
+    16aa:	00059503          	lh	a0,0(a1)
+                        for(k=0;k<N;k++)
+    16ae:	0689                	addi	a3,a3,2
+    16b0:	95a2                	add	a1,a1,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    16b2:	02ae8733          	mul	a4,t4,a0
+    16b6:	97ba                	add	a5,a5,a4
+                        for(k=0;k<N;k++)
+    16b8:	0ad90363          	beq	s2,a3,175e <.L525>
+
+000016bc <.L489>:
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    16bc:	00069303          	lh	t1,0(a3)
+    16c0:	00059383          	lh	t2,0(a1)
+                        for(k=0;k<N;k++)
+    16c4:	008580b3          	add	ra,a1,s0
+    16c8:	008082b3          	add	t0,ra,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    16cc:	02730733          	mul	a4,t1,t2
+    16d0:	00009e03          	lh	t3,0(ra)
+    16d4:	00269d03          	lh	s10,2(a3)
+                        for(k=0;k<N;k++)
+    16d8:	00828833          	add	a6,t0,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    16dc:	00029d83          	lh	s11,0(t0)
+    16e0:	00469a03          	lh	s4,4(a3)
+                        for(k=0;k<N;k++)
+    16e4:	008808b3          	add	a7,a6,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    16e8:	00081c83          	lh	s9,0(a6)
+    16ec:	00669083          	lh	ra,6(a3)
+                        for(k=0;k<N;k++)
+    16f0:	00888eb3          	add	t4,a7,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    16f4:	03cd0d33          	mul	s10,s10,t3
+    16f8:	00869303          	lh	t1,8(a3)
+    16fc:	00089c03          	lh	s8,0(a7)
+    1700:	00a69283          	lh	t0,10(a3)
+    1704:	000e9383          	lh	t2,0(t4)
+                        for(k=0;k<N;k++)
+    1708:	008e8533          	add	a0,t4,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    170c:	00c69803          	lh	a6,12(a3)
+                        for(k=0;k<N;k++)
+    1710:	008505b3          	add	a1,a0,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    1714:	00051e83          	lh	t4,0(a0)
+    1718:	97ba                	add	a5,a5,a4
+    171a:	03ba0a33          	mul	s4,s4,s11
+    171e:	00e69503          	lh	a0,14(a3)
+    1722:	00059e03          	lh	t3,0(a1)
+    1726:	01a78db3          	add	s11,a5,s10
+                        for(k=0;k<N;k++)
+    172a:	06c1                	addi	a3,a3,16
+    172c:	95a2                	add	a1,a1,s0
+                                C[i*N+j]+=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    172e:	039080b3          	mul	ra,ra,s9
+    1732:	014d88b3          	add	a7,s11,s4
+    1736:	03830733          	mul	a4,t1,s8
+    173a:	00188cb3          	add	s9,a7,ra
+    173e:	02728333          	mul	t1,t0,t2
+    1742:	00ec8c33          	add	s8,s9,a4
+    1746:	03d802b3          	mul	t0,a6,t4
+    174a:	006c03b3          	add	t2,s8,t1
+    174e:	03c50833          	mul	a6,a0,t3
+    1752:	00538d33          	add	s10,t2,t0
+    1756:	010d07b3          	add	a5,s10,a6
+                        for(k=0;k<N;k++)
+    175a:	f6d911e3          	bne	s2,a3,16bc <.L489>
+
+0000175e <.L525>:
+    175e:	00ff2023          	sw	a5,0(t5)
+                for (j=0; j<N; j++) {
+    1762:	001f8693          	addi	a3,t6,1
+
+00001766 <.LVL212>:
+    1766:	0f11                	addi	t5,t5,4
+    1768:	0609                	addi	a2,a2,2
+    176a:	00da8463          	beq	s5,a3,1772 <.L529>
+    176e:	8fb6                	mv	t6,a3
+    1770:	b559                	j	15f6 <.L490>
+
+00001772 <.L529>:
+        for (i=0; i<N; i++) {
+    1772:	001b8f13          	addi	t5,s7,1
+
+00001776 <.LVL213>:
+    1776:	99a2                	add	s3,s3,s0
+    1778:	9b56                	add	s6,s6,s5
+    177a:	9922                	add	s2,s2,s0
+    177c:	01fb8463          	beq	s7,t6,1784 <.L486>
+    1780:	8bfa                	mv	s7,t5
+    1782:	bdb1                	j	15de <.L488>
+
+00001784 <.L486>:
+}
+    1784:	40b6                	lw	ra,76(sp)
+    1786:	4426                	lw	s0,72(sp)
+    1788:	4496                	lw	s1,68(sp)
+    178a:	4906                	lw	s2,64(sp)
+    178c:	59f2                	lw	s3,60(sp)
+    178e:	5a62                	lw	s4,56(sp)
+    1790:	5ad2                	lw	s5,52(sp)
+    1792:	5b42                	lw	s6,48(sp)
+    1794:	5bb2                	lw	s7,44(sp)
+    1796:	5c22                	lw	s8,40(sp)
+    1798:	5c92                	lw	s9,36(sp)
+    179a:	5d02                	lw	s10,32(sp)
+    179c:	4df2                	lw	s11,28(sp)
+    179e:	6161                	addi	sp,sp,80
+
+000017a0 <.LVL215>:
+    17a0:	8082                	ret
+
+000017a2 <matrix_mul_matrix_bitextract>:
+        for (i=0; i<N; i++) {
+    17a2:	1c050463          	beqz	a0,196a <.L555>
+void matrix_mul_matrix_bitextract(ee_u32 N, MATRES *C, MATDAT *A, MATDAT *B) {
+    17a6:	7179                	addi	sp,sp,-48
+    17a8:	ce4e                	sw	s3,28(sp)
+    17aa:	00151993          	slli	s3,a0,0x1
+    17ae:	d422                	sw	s0,40(sp)
+    17b0:	d226                	sw	s1,36(sp)
+    17b2:	d04a                	sw	s2,32(sp)
+    17b4:	cc52                	sw	s4,24(sp)
+    17b6:	ca56                	sw	s5,20(sp)
+    17b8:	c85a                	sw	s6,16(sp)
+    17ba:	c65e                	sw	s7,12(sp)
+    17bc:	c462                	sw	s8,8(sp)
+    17be:	d606                	sw	ra,44(sp)
+    17c0:	8b2a                	mv	s6,a0
+    17c2:	842e                	mv	s0,a1
+    17c4:	84b6                	mv	s1,a3
+    17c6:	8ab2                	mv	s5,a2
+    17c8:	01360a33          	add	s4,a2,s3
+                        C[i*N+j]=0;
+    17cc:	00251913          	slli	s2,a0,0x2
+    17d0:	4b81                	li	s7,0
+        for (i=0; i<N; i++) {
+    17d2:	4c01                	li	s8,0
+
+000017d4 <.L532>:
+                for (j=0; j<N; j++) {
+    17d4:	002b9813          	slli	a6,s7,0x2
+    17d8:	01040533          	add	a0,s0,a6
+                        C[i*N+j]=0;
+    17dc:	864a                	mv	a2,s2
+    17de:	4581                	li	a1,0
+    17e0:	2cf000ef          	jal	ra,22ae <memset>
+
+000017e4 <.LVL218>:
+    17e4:	83aa                	mv	t2,a0
+    17e6:	88a6                	mv	a7,s1
+                for (j=0; j<N; j++) {
+    17e8:	4301                	li	t1,0
+
+000017ea <.L534>:
+                        for(k=0;k<N;k++)
+    17ea:	415a07b3          	sub	a5,s4,s5
+    17ee:	ffe78093          	addi	ra,a5,-2
+    17f2:	0010d293          	srli	t0,ra,0x1
+    17f6:	00128593          	addi	a1,t0,1
+    17fa:	0035f613          	andi	a2,a1,3
+    17fe:	8546                	mv	a0,a7
+    1800:	86d6                	mv	a3,s5
+    1802:	4e81                	li	t4,0
+    1804:	c259                	beqz	a2,188a <.L533>
+    1806:	4705                	li	a4,1
+    1808:	04e60c63          	beq	a2,a4,1860 <.L548>
+    180c:	4e09                	li	t3,2
+    180e:	03c60663          	beq	a2,t3,183a <.L549>
+
+00001812 <.LBB94>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    1812:	000a9e83          	lh	t4,0(s5)
+    1816:	00089f03          	lh	t5,0(a7)
+
+0000181a <.LBE94>:
+                        for(k=0;k<N;k++)
+    181a:	002a8693          	addi	a3,s5,2
+    181e:	01388533          	add	a0,a7,s3
+
+00001822 <.LBB95>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    1822:	03ee8fb3          	mul	t6,t4,t5
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+    1826:	402fd813          	srai	a6,t6,0x2
+    182a:	405fd093          	srai	ra,t6,0x5
+    182e:	00f87793          	andi	a5,a6,15
+    1832:	07f0f293          	andi	t0,ra,127
+    1836:	02578eb3          	mul	t4,a5,t0
+
+0000183a <.L549>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    183a:	00069583          	lh	a1,0(a3)
+    183e:	00051603          	lh	a2,0(a0)
+
+00001842 <.LBE96>:
+                        for(k=0;k<N;k++)
+    1842:	0689                	addi	a3,a3,2
+    1844:	954e                	add	a0,a0,s3
+
+00001846 <.LBB97>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    1846:	02c58e33          	mul	t3,a1,a2
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+    184a:	402e5713          	srai	a4,t3,0x2
+    184e:	405e5f13          	srai	t5,t3,0x5
+    1852:	00f77f93          	andi	t6,a4,15
+    1856:	07ff7813          	andi	a6,t5,127
+    185a:	030f80b3          	mul	ra,t6,a6
+    185e:	9e86                	add	t4,t4,ra
+
+00001860 <.L548>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    1860:	00069783          	lh	a5,0(a3)
+    1864:	00051283          	lh	t0,0(a0)
+
+00001868 <.LBE98>:
+                        for(k=0;k<N;k++)
+    1868:	0689                	addi	a3,a3,2
+    186a:	954e                	add	a0,a0,s3
+
+0000186c <.LBB99>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    186c:	025785b3          	mul	a1,a5,t0
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+    1870:	4025d613          	srai	a2,a1,0x2
+    1874:	4055de13          	srai	t3,a1,0x5
+    1878:	00f67713          	andi	a4,a2,15
+    187c:	07fe7f13          	andi	t5,t3,127
+    1880:	03e70fb3          	mul	t6,a4,t5
+    1884:	9efe                	add	t4,t4,t6
+
+00001886 <.LBE99>:
+                        for(k=0;k<N;k++)
+    1886:	0ada0363          	beq	s4,a3,192c <.L553>
+
+0000188a <.L533>:
+    188a:	01350833          	add	a6,a0,s3
+
+0000188e <.LBB101>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    188e:	00069083          	lh	ra,0(a3)
+    1892:	00051283          	lh	t0,0(a0)
+
+00001896 <.LBE101>:
+                        for(k=0;k<N;k++)
+    1896:	013807b3          	add	a5,a6,s3
+
+0000189a <.LBB102>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    189a:	00269e03          	lh	t3,2(a3)
+    189e:	00081703          	lh	a4,0(a6)
+    18a2:	00079f83          	lh	t6,0(a5)
+
+000018a6 <.LBE102>:
+                        for(k=0;k<N;k++)
+    18a6:	01378533          	add	a0,a5,s3
+
+000018aa <.LBB103>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    18aa:	00469603          	lh	a2,4(a3)
+    18ae:	02508f33          	mul	t5,ra,t0
+
+000018b2 <.LVL222>:
+    18b2:	00051803          	lh	a6,0(a0)
+    18b6:	00669583          	lh	a1,6(a3)
+
+000018ba <.LBE103>:
+                        for(k=0;k<N;k++)
+    18ba:	06a1                	addi	a3,a3,8
+    18bc:	954e                	add	a0,a0,s3
+
+000018be <.LBB104>:
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    18be:	02ee00b3          	mul	ra,t3,a4
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+    18c2:	402f5293          	srai	t0,t5,0x2
+    18c6:	405f5e13          	srai	t3,t5,0x5
+    18ca:	00f2f713          	andi	a4,t0,15
+    18ce:	07fe7793          	andi	a5,t3,127
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    18d2:	03f60633          	mul	a2,a2,t6
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+    18d6:	4050df13          	srai	t5,ra,0x5
+
+000018da <.LVL223>:
+    18da:	4020df93          	srai	t6,ra,0x2
+    18de:	07ff7293          	andi	t0,t5,127
+    18e2:	00fff093          	andi	ra,t6,15
+                                MATRES tmp=(MATRES)A[i*N+k] * (MATRES)B[k*N+j];
+    18e6:	030585b3          	mul	a1,a1,a6
+                                C[i*N+j]+=bit_extract(tmp,2,4)*bit_extract(tmp,5,7);
+    18ea:	40565e13          	srai	t3,a2,0x5
+    18ee:	40265813          	srai	a6,a2,0x2
+    18f2:	00f87f93          	andi	t6,a6,15
+    18f6:	07fe7613          	andi	a2,t3,127
+    18fa:	02f707b3          	mul	a5,a4,a5
+    18fe:	4055df13          	srai	t5,a1,0x5
+    1902:	4025d713          	srai	a4,a1,0x2
+    1906:	00f77813          	andi	a6,a4,15
+    190a:	07ff7593          	andi	a1,t5,127
+    190e:	025080b3          	mul	ra,ra,t0
+    1912:	9ebe                	add	t4,t4,a5
+
+00001914 <.LBB105>:
+    1914:	02cf82b3          	mul	t0,t6,a2
+    1918:	001e8e33          	add	t3,t4,ra
+
+0000191c <.LBB106>:
+    191c:	02b80fb3          	mul	t6,a6,a1
+    1920:	005e0633          	add	a2,t3,t0
+
+00001924 <.LBB107>:
+    1924:	01f60eb3          	add	t4,a2,t6
+
+00001928 <.LBE107>:
+                        for(k=0;k<N;k++)
+    1928:	f6da11e3          	bne	s4,a3,188a <.L533>
+
+0000192c <.L553>:
+    192c:	01d3a023          	sw	t4,0(t2)
+                for (j=0; j<N; j++) {
+    1930:	00130693          	addi	a3,t1,1
+
+00001934 <.LVL224>:
+    1934:	0391                	addi	t2,t2,4
+    1936:	0889                	addi	a7,a7,2
+    1938:	00db0463          	beq	s6,a3,1940 <.L558>
+    193c:	8336                	mv	t1,a3
+    193e:	b575                	j	17ea <.L534>
+
+00001940 <.L558>:
+        for (i=0; i<N; i++) {
+    1940:	001c0393          	addi	t2,s8,1
+
+00001944 <.LVL225>:
+    1944:	9ace                	add	s5,s5,s3
+    1946:	9bda                	add	s7,s7,s6
+    1948:	9a4e                	add	s4,s4,s3
+    194a:	006c0463          	beq	s8,t1,1952 <.L530>
+    194e:	8c1e                	mv	s8,t2
+    1950:	b551                	j	17d4 <.L532>
+
+00001952 <.L530>:
+                        }
+                }
+        }
+}
+    1952:	50b2                	lw	ra,44(sp)
+    1954:	5422                	lw	s0,40(sp)
+
+00001956 <.LVL226>:
+    1956:	5492                	lw	s1,36(sp)
+
+00001958 <.LVL227>:
+    1958:	5902                	lw	s2,32(sp)
+    195a:	49f2                	lw	s3,28(sp)
+    195c:	4a62                	lw	s4,24(sp)
+    195e:	4ad2                	lw	s5,20(sp)
+    1960:	4b42                	lw	s6,16(sp)
+
+00001962 <.LVL228>:
+    1962:	4bb2                	lw	s7,12(sp)
+    1964:	4c22                	lw	s8,8(sp)
+    1966:	6145                	addi	sp,sp,48
+    1968:	8082                	ret
+
+0000196a <.L555>:
+    196a:	8082                	ret
+
+0000196c <whisperPrintfImpl>:
+int
+whisperPrintfImpl(const char* format, va_list ap)
+{
+  int count = 0;  // Printed character count
+
+  for (const char* fp = format; *fp; fp++)
+    196c:	00054783          	lbu	a5,0(a0)
+    1970:	0e0789e3          	beqz	a5,2262 <.L594>
+
+00001974 <.LBE150>:
+{
+    1974:	7139                	addi	sp,sp,-64
+    1976:	6fc1                	lui	t6,0x10
+    1978:	de22                	sw	s0,60(sp)
+    197a:	862a                	mv	a2,a0
+    197c:	dc26                	sw	s1,56(sp)
+    197e:	da4a                	sw	s2,52(sp)
+    1980:	d84e                	sw	s3,48(sp)
+    1982:	d652                	sw	s4,44(sp)
+    1984:	d456                	sw	s5,40(sp)
+  int count = 0;  // Printed character count
+    1986:	4501                	li	a0,0
+
+00001988 <.LBB370>:
+    {
+      if (*fp != '%')
+    1988:	02500313          	li	t1,37
+        {
+          whisperPutc('%');
+          continue;
+        }
+
+      if (*fp == '-')
+    198c:	02d00293          	li	t0,45
+        {
+          fp++;  // Pad right not yet implemented.
+        }
+
+      while (*fp == '0')
+    1990:	03000893          	li	a7,48
+        {
+          fp++;  // Pad zero not yet implented.
+        }
+
+      if (*fp == '*')
+    1994:	02a00413          	li	s0,42
+    1998:	02000393          	li	t2,32
+    199c:	000f8f93          	mv	t6,t6
+
+000019a0 <.LBB151>:
+  *(volatile char*)(STDOUT) = c;
+    19a0:	d0580837          	lui	a6,0xd0580
+    19a4:	00b10f13          	addi	t5,sp,11
+
+000019a8 <.LBB172>:
+          char c = digit < 10 ? '0' + digit : 'a' + digit;
+    19a8:	4ea5                	li	t4,9
+
+000019aa <.LBB212>:
+      char c = '0' + (value % 10);
+    19aa:	4e29                	li	t3,10
+    19ac:	a811                	j	19c0 <.L593>
+
+000019ae <.L821>:
+          continue;
+    19ae:	8736                	mv	a4,a3
+
+000019b0 <.LBB263>:
+  *(volatile char*)(STDOUT) = c;
+    19b0:	00f80023          	sb	a5,0(a6) # d0580000 <STACK+0xd0567f70>
+
+000019b4 <.LBE263>:
+          continue;
+    19b4:	86b2                	mv	a3,a2
+          ++count;
+    19b6:	0505                	addi	a0,a0,1
+          continue;
+    19b8:	863a                	mv	a2,a4
+
+000019ba <.L562>:
+  for (const char* fp = format; *fp; fp++)
+    19ba:	0016c783          	lbu	a5,1(a3)
+    19be:	cfdd                	beqz	a5,1a7c <.L559>
+
+000019c0 <.L593>:
+      ++fp;  // Skip %
+    19c0:	00160693          	addi	a3,a2,1
+      if (*fp != '%')
+    19c4:	fe6795e3          	bne	a5,t1,19ae <.L821>
+
+000019c8 <.LVL237>:
+      if (*fp == 0)
+    19c8:	00164783          	lbu	a5,1(a2)
+    19cc:	cbc5                	beqz	a5,1a7c <.L559>
+      if (*fp == '%')
+    19ce:	0a678163          	beq	a5,t1,1a70 <.L822>
+      if (*fp == '-')
+    19d2:	08578a63          	beq	a5,t0,1a66 <.L823>
+
+000019d6 <.L564>:
+      while (*fp == '0')
+    19d6:	07179163          	bne	a5,a7,1a38 <.L565>
+
+000019da <.L566>:
+    19da:	0016c783          	lbu	a5,1(a3)
+          fp++;  // Pad zero not yet implented.
+    19de:	0685                	addi	a3,a3,1
+
+000019e0 <.LVL239>:
+    19e0:	8736                	mv	a4,a3
+      while (*fp == '0')
+    19e2:	05179b63          	bne	a5,a7,1a38 <.L565>
+
+000019e6 <.LVL240>:
+    19e6:	0016c783          	lbu	a5,1(a3)
+          fp++;  // Pad zero not yet implented.
+    19ea:	0685                	addi	a3,a3,1
+
+000019ec <.LVL241>:
+      while (*fp == '0')
+    19ec:	05179663          	bne	a5,a7,1a38 <.L565>
+
+000019f0 <.LVL242>:
+    19f0:	00274783          	lbu	a5,2(a4)
+          fp++;  // Pad zero not yet implented.
+    19f4:	00270693          	addi	a3,a4,2
+
+000019f8 <.LVL243>:
+      while (*fp == '0')
+    19f8:	05179063          	bne	a5,a7,1a38 <.L565>
+
+000019fc <.LVL244>:
+    19fc:	00374783          	lbu	a5,3(a4)
+          fp++;  // Pad zero not yet implented.
+    1a00:	00370693          	addi	a3,a4,3
+
+00001a04 <.LVL245>:
+      while (*fp == '0')
+    1a04:	03179a63          	bne	a5,a7,1a38 <.L565>
+
+00001a08 <.LVL246>:
+    1a08:	00474783          	lbu	a5,4(a4)
+          fp++;  // Pad zero not yet implented.
+    1a0c:	00470693          	addi	a3,a4,4
+
+00001a10 <.LVL247>:
+      while (*fp == '0')
+    1a10:	03179463          	bne	a5,a7,1a38 <.L565>
+
+00001a14 <.LVL248>:
+    1a14:	00574783          	lbu	a5,5(a4)
+          fp++;  // Pad zero not yet implented.
+    1a18:	00570693          	addi	a3,a4,5
+
+00001a1c <.LVL249>:
+      while (*fp == '0')
+    1a1c:	01179e63          	bne	a5,a7,1a38 <.L565>
+
+00001a20 <.LVL250>:
+    1a20:	00674783          	lbu	a5,6(a4)
+          fp++;  // Pad zero not yet implented.
+    1a24:	00670693          	addi	a3,a4,6
+
+00001a28 <.LVL251>:
+      while (*fp == '0')
+    1a28:	01179863          	bne	a5,a7,1a38 <.L565>
+
+00001a2c <.LVL252>:
+    1a2c:	00774783          	lbu	a5,7(a4)
+          fp++;  // Pad zero not yet implented.
+    1a30:	00770693          	addi	a3,a4,7
+
+00001a34 <.LVL253>:
+      while (*fp == '0')
+    1a34:	fb1783e3          	beq	a5,a7,19da <.L566>
+
+00001a38 <.L565>:
+        {
+          int width = va_arg(ap, int);
+          fp++;  // Width not yet implemented.
+    1a38:	00168713          	addi	a4,a3,1
+
+00001a3c <.LBE264>:
+      if (*fp == '*')
+    1a3c:	04879863          	bne	a5,s0,1a8c <.L824>
+
+00001a40 <.LBB265>:
+        {
+          while (*fp >= '0' && *fp <= '9')
+            ++fp;   // Width not yet implemented.
+        }
+
+      switch (*fp)
+    1a40:	0016c783          	lbu	a5,1(a3)
+  for (const char* fp = format; *fp; fp++)
+    1a44:	00268613          	addi	a2,a3,2
+
+00001a48 <.LBB266>:
+          int width = va_arg(ap, int);
+    1a48:	0591                	addi	a1,a1,4
+
+00001a4a <.LVL255>:
+          fp++;  // Width not yet implemented.
+    1a4a:	86ba                	mv	a3,a4
+
+00001a4c <.L569>:
+      switch (*fp)
+    1a4c:	fa878793          	addi	a5,a5,-88
+    1a50:	0ff7f993          	andi	s3,a5,255
+    1a54:	f733e3e3          	bltu	t2,s3,19ba <.L562>
+    1a58:	00299a13          	slli	s4,s3,0x2
+    1a5c:	01fa0ab3          	add	s5,s4,t6
+    1a60:	000aa483          	lw	s1,0(s5)
+    1a64:	8482                	jr	s1
+
+00001a66 <.L823>:
+      while (*fp == '0')
+    1a66:	00264783          	lbu	a5,2(a2)
+          fp++;  // Pad right not yet implemented.
+    1a6a:	00260693          	addi	a3,a2,2
+    1a6e:	b7a5                	j	19d6 <.L564>
+
+00001a70 <.L822>:
+  *(volatile char*)(STDOUT) = c;
+    1a70:	00680023          	sb	t1,0(a6)
+
+00001a74 <.LBE267>:
+  for (const char* fp = format; *fp; fp++)
+    1a74:	0016c783          	lbu	a5,1(a3)
+    1a78:	0609                	addi	a2,a2,2
+
+00001a7a <.LVL261>:
+    1a7a:	f3b9                	bnez	a5,19c0 <.L593>
+
+00001a7c <.L559>:
+          break;
+        }
+    }
+
+  return count;
+}
+    1a7c:	5472                	lw	s0,60(sp)
+    1a7e:	54e2                	lw	s1,56(sp)
+    1a80:	5952                	lw	s2,52(sp)
+    1a82:	59c2                	lw	s3,48(sp)
+    1a84:	5a32                	lw	s4,44(sp)
+    1a86:	5aa2                	lw	s5,40(sp)
+    1a88:	6121                	addi	sp,sp,64
+    1a8a:	8082                	ret
+
+00001a8c <.L824>:
+          while (*fp >= '0' && *fp <= '9')
+    1a8c:	fd078613          	addi	a2,a5,-48
+    1a90:	0ff67493          	andi	s1,a2,255
+    1a94:	7c9ee463          	bltu	t4,s1,225c <.L825>
+    1a98:	00074783          	lbu	a5,0(a4)
+    1a9c:	8636                	mv	a2,a3
+
+00001a9e <.LVL263>:
+            ++fp;   // Width not yet implemented.
+    1a9e:	86ba                	mv	a3,a4
+
+00001aa0 <.LVL264>:
+          while (*fp >= '0' && *fp <= '9')
+    1aa0:	fd078913          	addi	s2,a5,-48
+    1aa4:	0ff97993          	andi	s3,s2,255
+    1aa8:	0b3eea63          	bltu	t4,s3,1b5c <.L803>
+
+00001aac <.L826>:
+    1aac:	00174783          	lbu	a5,1(a4)
+    1ab0:	863a                	mv	a2,a4
+
+00001ab2 <.LVL266>:
+            ++fp;   // Width not yet implemented.
+    1ab2:	00170693          	addi	a3,a4,1
+
+00001ab6 <.LVL267>:
+          while (*fp >= '0' && *fp <= '9')
+    1ab6:	fd078a13          	addi	s4,a5,-48
+    1aba:	0ffa7a93          	andi	s5,s4,255
+    1abe:	095eef63          	bltu	t4,s5,1b5c <.L803>
+
+00001ac2 <.LVL268>:
+    1ac2:	00274783          	lbu	a5,2(a4)
+    1ac6:	8636                	mv	a2,a3
+
+00001ac8 <.LVL269>:
+            ++fp;   // Width not yet implemented.
+    1ac8:	00270693          	addi	a3,a4,2
+
+00001acc <.LVL270>:
+          while (*fp >= '0' && *fp <= '9')
+    1acc:	fd078493          	addi	s1,a5,-48
+    1ad0:	0ff4f913          	andi	s2,s1,255
+    1ad4:	092ee463          	bltu	t4,s2,1b5c <.L803>
+
+00001ad8 <.LVL271>:
+    1ad8:	00374783          	lbu	a5,3(a4)
+    1adc:	8636                	mv	a2,a3
+
+00001ade <.LVL272>:
+            ++fp;   // Width not yet implemented.
+    1ade:	00370693          	addi	a3,a4,3
+
+00001ae2 <.LVL273>:
+          while (*fp >= '0' && *fp <= '9')
+    1ae2:	fd078993          	addi	s3,a5,-48
+    1ae6:	0ff9fa13          	andi	s4,s3,255
+    1aea:	074ee963          	bltu	t4,s4,1b5c <.L803>
+
+00001aee <.LVL274>:
+    1aee:	00474783          	lbu	a5,4(a4)
+    1af2:	8636                	mv	a2,a3
+
+00001af4 <.LVL275>:
+            ++fp;   // Width not yet implemented.
+    1af4:	00470693          	addi	a3,a4,4
+
+00001af8 <.LVL276>:
+          while (*fp >= '0' && *fp <= '9')
+    1af8:	fd078a93          	addi	s5,a5,-48
+    1afc:	0ffaf493          	andi	s1,s5,255
+    1b00:	049eee63          	bltu	t4,s1,1b5c <.L803>
+
+00001b04 <.LVL277>:
+    1b04:	00574783          	lbu	a5,5(a4)
+    1b08:	8636                	mv	a2,a3
+
+00001b0a <.LVL278>:
+            ++fp;   // Width not yet implemented.
+    1b0a:	00570693          	addi	a3,a4,5
+
+00001b0e <.LVL279>:
+          while (*fp >= '0' && *fp <= '9')
+    1b0e:	fd078913          	addi	s2,a5,-48
+    1b12:	0ff97993          	andi	s3,s2,255
+    1b16:	053ee363          	bltu	t4,s3,1b5c <.L803>
+
+00001b1a <.LVL280>:
+    1b1a:	00674783          	lbu	a5,6(a4)
+    1b1e:	8636                	mv	a2,a3
+
+00001b20 <.LVL281>:
+            ++fp;   // Width not yet implemented.
+    1b20:	00670693          	addi	a3,a4,6
+
+00001b24 <.LVL282>:
+          while (*fp >= '0' && *fp <= '9')
+    1b24:	fd078a13          	addi	s4,a5,-48
+    1b28:	0ffa7a93          	andi	s5,s4,255
+    1b2c:	035ee863          	bltu	t4,s5,1b5c <.L803>
+
+00001b30 <.LVL283>:
+    1b30:	00774783          	lbu	a5,7(a4)
+    1b34:	8636                	mv	a2,a3
+
+00001b36 <.LVL284>:
+            ++fp;   // Width not yet implemented.
+    1b36:	00770693          	addi	a3,a4,7
+
+00001b3a <.LVL285>:
+          while (*fp >= '0' && *fp <= '9')
+    1b3a:	fd078493          	addi	s1,a5,-48
+    1b3e:	0ff4f913          	andi	s2,s1,255
+    1b42:	012eed63          	bltu	t4,s2,1b5c <.L803>
+    1b46:	00874783          	lbu	a5,8(a4)
+    1b4a:	0721                	addi	a4,a4,8
+
+00001b4c <.LVL286>:
+            ++fp;   // Width not yet implemented.
+    1b4c:	8636                	mv	a2,a3
+
+00001b4e <.LVL287>:
+          while (*fp >= '0' && *fp <= '9')
+    1b4e:	fd078913          	addi	s2,a5,-48
+    1b52:	0ff97993          	andi	s3,s2,255
+            ++fp;   // Width not yet implemented.
+    1b56:	86ba                	mv	a3,a4
+
+00001b58 <.LVL288>:
+          while (*fp >= '0' && *fp <= '9')
+    1b58:	f53efae3          	bgeu	t4,s3,1aac <.L826>
+
+00001b5c <.L803>:
+  for (const char* fp = format; *fp; fp++)
+    1b5c:	0609                	addi	a2,a2,2
+    1b5e:	b5fd                	j	1a4c <.L569>
+
+00001b60 <.L570>:
+  unsigned uu = value;
+    1b60:	419c                	lw	a5,0(a1)
+  int charCount = 0;
+    1b62:	4981                	li	s3,0
+
+00001b64 <.LBE269>:
+          count += whisperPrintInt(va_arg(ap, int), 16);
+    1b64:	0591                	addi	a1,a1,4
+
+00001b66 <.LBB270>:
+  if (base == 8)
+    1b66:	a011                	j	1b6a <.L587>
+
+00001b68 <.L597>:
+          buffer[charCount++] = c;
+    1b68:	89ba                	mv	s3,a4
+
+00001b6a <.L587>:
+          char c = digit < 10 ? '0' + digit : 'a' + digit;
+    1b6a:	00f7f913          	andi	s2,a5,15
+    1b6e:	06190493          	addi	s1,s2,97
+    1b72:	012ec463          	blt	t4,s2,1b7a <.L586>
+    1b76:	03090493          	addi	s1,s2,48
+
+00001b7a <.L586>:
+          buffer[charCount++] = c;
+    1b7a:	00198713          	addi	a4,s3,1
+
+00001b7e <.LVL293>:
+    1b7e:	00c10a93          	addi	s5,sp,12
+    1b82:	00ea8933          	add	s2,s5,a4
+    1b86:	fe990fa3          	sb	s1,-1(s2)
+          uu >>= 4;
+    1b8a:	8391                	srli	a5,a5,0x4
+
+00001b8c <.LBE176>:
+      while (uu);
+    1b8c:	fff1                	bnez	a5,1b68 <.L597>
+  char* p = buffer + charCount - 1;
+    1b8e:	00c10a13          	addi	s4,sp,12
+    1b92:	013a07b3          	add	a5,s4,s3
+
+00001b96 <.LBB177>:
+  for (unsigned i = 0; i < charCount; ++i)
+    1b96:	41e789b3          	sub	s3,a5,t5
+
+00001b9a <.LVL296>:
+    1b9a:	0079f493          	andi	s1,s3,7
+
+00001b9e <.LVL297>:
+    1b9e:	c8a5                	beqz	s1,1c0e <.L588>
+    1ba0:	4a85                	li	s5,1
+    1ba2:	05548f63          	beq	s1,s5,1c00 <.L754>
+    1ba6:	4909                	li	s2,2
+
+00001ba8 <.LVL298>:
+    1ba8:	05248763          	beq	s1,s2,1bf6 <.L755>
+    1bac:	4a0d                	li	s4,3
+
+00001bae <.LVL299>:
+    1bae:	03448f63          	beq	s1,s4,1bec <.L756>
+    1bb2:	4991                	li	s3,4
+    1bb4:	03348763          	beq	s1,s3,1be2 <.L757>
+    1bb8:	4a95                	li	s5,5
+    1bba:	01548f63          	beq	s1,s5,1bd8 <.L758>
+    1bbe:	4919                	li	s2,6
+    1bc0:	01248763          	beq	s1,s2,1bce <.L759>
+
+00001bc4 <.LVL300>:
+    whisperPutc(*p--);
+    1bc4:	0007c483          	lbu	s1,0(a5)
+    1bc8:	17fd                	addi	a5,a5,-1
+
+00001bca <.LBB178>:
+  *(volatile char*)(STDOUT) = c;
+    1bca:	00980023          	sb	s1,0(a6)
+
+00001bce <.L759>:
+    whisperPutc(*p--);
+    1bce:	0007ca03          	lbu	s4,0(a5)
+    1bd2:	17fd                	addi	a5,a5,-1
+
+00001bd4 <.LBB195>:
+  *(volatile char*)(STDOUT) = c;
+    1bd4:	01480023          	sb	s4,0(a6)
+
+00001bd8 <.L758>:
+    whisperPutc(*p--);
+    1bd8:	0007c983          	lbu	s3,0(a5)
+    1bdc:	17fd                	addi	a5,a5,-1
+
+00001bde <.LBB196>:
+  *(volatile char*)(STDOUT) = c;
+    1bde:	01380023          	sb	s3,0(a6)
+
+00001be2 <.L757>:
+    whisperPutc(*p--);
+    1be2:	0007ca83          	lbu	s5,0(a5)
+    1be6:	17fd                	addi	a5,a5,-1
+
+00001be8 <.LBB197>:
+  *(volatile char*)(STDOUT) = c;
+    1be8:	01580023          	sb	s5,0(a6)
+
+00001bec <.L756>:
+    whisperPutc(*p--);
+    1bec:	0007c903          	lbu	s2,0(a5)
+    1bf0:	17fd                	addi	a5,a5,-1
+
+00001bf2 <.LBB198>:
+  *(volatile char*)(STDOUT) = c;
+    1bf2:	01280023          	sb	s2,0(a6)
+
+00001bf6 <.L755>:
+    whisperPutc(*p--);
+    1bf6:	0007c483          	lbu	s1,0(a5)
+    1bfa:	17fd                	addi	a5,a5,-1
+
+00001bfc <.LBB199>:
+  *(volatile char*)(STDOUT) = c;
+    1bfc:	00980023          	sb	s1,0(a6)
+
+00001c00 <.L754>:
+    whisperPutc(*p--);
+    1c00:	0007ca03          	lbu	s4,0(a5)
+    1c04:	17fd                	addi	a5,a5,-1
+
+00001c06 <.LBB200>:
+  *(volatile char*)(STDOUT) = c;
+    1c06:	01480023          	sb	s4,0(a6)
+
+00001c0a <.LBE200>:
+  for (unsigned i = 0; i < charCount; ++i)
+    1c0a:	05e78563          	beq	a5,t5,1c54 <.L808>
+
+00001c0e <.L588>:
+    whisperPutc(*p--);
+    1c0e:	0007c983          	lbu	s3,0(a5)
+
+00001c12 <.LBB201>:
+    1c12:	17e1                	addi	a5,a5,-8
+
+00001c14 <.LBB202>:
+  *(volatile char*)(STDOUT) = c;
+    1c14:	01380023          	sb	s3,0(a6)
+
+00001c18 <.LBE202>:
+    whisperPutc(*p--);
+    1c18:	0077ca83          	lbu	s5,7(a5)
+
+00001c1c <.LBB203>:
+  *(volatile char*)(STDOUT) = c;
+    1c1c:	01580023          	sb	s5,0(a6)
+
+00001c20 <.LBE203>:
+    whisperPutc(*p--);
+    1c20:	0067c903          	lbu	s2,6(a5)
+
+00001c24 <.LBB204>:
+  *(volatile char*)(STDOUT) = c;
+    1c24:	01280023          	sb	s2,0(a6)
+
+00001c28 <.LBE204>:
+    whisperPutc(*p--);
+    1c28:	0057c483          	lbu	s1,5(a5)
+
+00001c2c <.LBB205>:
+  *(volatile char*)(STDOUT) = c;
+    1c2c:	00980023          	sb	s1,0(a6)
+
+00001c30 <.LBE205>:
+    whisperPutc(*p--);
+    1c30:	0047ca03          	lbu	s4,4(a5)
+
+00001c34 <.LBB206>:
+  *(volatile char*)(STDOUT) = c;
+    1c34:	01480023          	sb	s4,0(a6)
+
+00001c38 <.LBE206>:
+    whisperPutc(*p--);
+    1c38:	0037c983          	lbu	s3,3(a5)
+
+00001c3c <.LBB207>:
+  *(volatile char*)(STDOUT) = c;
+    1c3c:	01380023          	sb	s3,0(a6)
+
+00001c40 <.LBE207>:
+    whisperPutc(*p--);
+    1c40:	0027ca83          	lbu	s5,2(a5)
+
+00001c44 <.LBB208>:
+  *(volatile char*)(STDOUT) = c;
+    1c44:	01580023          	sb	s5,0(a6)
+
+00001c48 <.LBE208>:
+    whisperPutc(*p--);
+    1c48:	0017c903          	lbu	s2,1(a5)
+
+00001c4c <.LBB209>:
+  *(volatile char*)(STDOUT) = c;
+    1c4c:	01280023          	sb	s2,0(a6)
+
+00001c50 <.LBE209>:
+  for (unsigned i = 0; i < charCount; ++i)
+    1c50:	fbe79fe3          	bne	a5,t5,1c0e <.L588>
+
+00001c54 <.L808>:
+          count += whisperPrintInt(va_arg(ap, int), 16);
+    1c54:	953a                	add	a0,a0,a4
+          break;
+    1c56:	b395                	j	19ba <.L562>
+
+00001c58 <.L572>:
+          count += whisperPrintDecimal((unsigned) va_arg(ap, unsigned));
+    1c58:	0005a983          	lw	s3,0(a1)
+    1c5c:	0591                	addi	a1,a1,4
+
+00001c5e <.LBB271>:
+  if (neg)
+    1c5e:	87ce                	mv	a5,s3
+    1c60:	5e09c963          	bltz	s3,2252 <.L827>
+
+00001c64 <.L581>:
+    1c64:	4701                	li	a4,0
+
+00001c66 <.L582>:
+      char c = '0' + (value % 10);
+    1c66:	03c7ea33          	rem	s4,a5,t3
+      buffer[charCount++] = c;
+    1c6a:	00c10913          	addi	s2,sp,12
+    1c6e:	84ba                	mv	s1,a4
+    1c70:	0705                	addi	a4,a4,1
+
+00001c72 <.LVL331>:
+    1c72:	00e90ab3          	add	s5,s2,a4
+    1c76:	893a                	mv	s2,a4
+      value = value / 10;
+    1c78:	03c7c7b3          	div	a5,a5,t3
+
+00001c7c <.LVL332>:
+      char c = '0' + (value % 10);
+    1c7c:	030a0a13          	addi	s4,s4,48
+
+00001c80 <.LVL333>:
+      buffer[charCount++] = c;
+    1c80:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001c84 <.LBE215>:
+  while (value);
+    1c84:	cbf1                	beqz	a5,1d58 <.L814>
+
+00001c86 <.LBB216>:
+      char c = '0' + (value % 10);
+    1c86:	03c7ea33          	rem	s4,a5,t3
+
+00001c8a <.LVL334>:
+    1c8a:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1c8c:	00c10a93          	addi	s5,sp,12
+
+00001c90 <.LVL335>:
+    1c90:	0705                	addi	a4,a4,1
+
+00001c92 <.LVL336>:
+    1c92:	9aba                	add	s5,s5,a4
+
+00001c94 <.LVL337>:
+      value = value / 10;
+    1c94:	03c7c7b3          	div	a5,a5,t3
+
+00001c98 <.LVL338>:
+      char c = '0' + (value % 10);
+    1c98:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1c9c:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001ca0 <.LBE216>:
+  while (value);
+    1ca0:	cfc5                	beqz	a5,1d58 <.L814>
+
+00001ca2 <.LBB217>:
+      char c = '0' + (value % 10);
+    1ca2:	03c7ea33          	rem	s4,a5,t3
+    1ca6:	84ba                	mv	s1,a4
+
+00001ca8 <.LVL339>:
+      buffer[charCount++] = c;
+    1ca8:	00c10a93          	addi	s5,sp,12
+
+00001cac <.LVL340>:
+    1cac:	00290713          	addi	a4,s2,2
+
+00001cb0 <.LVL341>:
+    1cb0:	9aba                	add	s5,s5,a4
+
+00001cb2 <.LVL342>:
+      value = value / 10;
+    1cb2:	03c7c7b3          	div	a5,a5,t3
+
+00001cb6 <.LVL343>:
+      char c = '0' + (value % 10);
+    1cb6:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1cba:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001cbe <.LBE217>:
+  while (value);
+    1cbe:	cfc9                	beqz	a5,1d58 <.L814>
+
+00001cc0 <.LBB218>:
+      char c = '0' + (value % 10);
+    1cc0:	03c7ea33          	rem	s4,a5,t3
+    1cc4:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1cc6:	00c10a93          	addi	s5,sp,12
+
+00001cca <.LVL344>:
+    1cca:	00390713          	addi	a4,s2,3
+
+00001cce <.LVL345>:
+    1cce:	9aba                	add	s5,s5,a4
+
+00001cd0 <.LVL346>:
+      value = value / 10;
+    1cd0:	03c7c7b3          	div	a5,a5,t3
+
+00001cd4 <.LVL347>:
+      char c = '0' + (value % 10);
+    1cd4:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1cd8:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001cdc <.LBE218>:
+  while (value);
+    1cdc:	cfb5                	beqz	a5,1d58 <.L814>
+
+00001cde <.LBB219>:
+      char c = '0' + (value % 10);
+    1cde:	03c7ea33          	rem	s4,a5,t3
+    1ce2:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1ce4:	00c10a93          	addi	s5,sp,12
+
+00001ce8 <.LVL348>:
+    1ce8:	00490713          	addi	a4,s2,4
+
+00001cec <.LVL349>:
+    1cec:	9aba                	add	s5,s5,a4
+
+00001cee <.LVL350>:
+      value = value / 10;
+    1cee:	03c7c7b3          	div	a5,a5,t3
+
+00001cf2 <.LVL351>:
+      char c = '0' + (value % 10);
+    1cf2:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1cf6:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001cfa <.LBE219>:
+  while (value);
+    1cfa:	cfb9                	beqz	a5,1d58 <.L814>
+
+00001cfc <.LBB220>:
+      char c = '0' + (value % 10);
+    1cfc:	03c7ea33          	rem	s4,a5,t3
+    1d00:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1d02:	00c10a93          	addi	s5,sp,12
+
+00001d06 <.LVL352>:
+    1d06:	00590713          	addi	a4,s2,5
+
+00001d0a <.LVL353>:
+    1d0a:	9aba                	add	s5,s5,a4
+
+00001d0c <.LVL354>:
+      value = value / 10;
+    1d0c:	03c7c7b3          	div	a5,a5,t3
+
+00001d10 <.LVL355>:
+      char c = '0' + (value % 10);
+    1d10:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1d14:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001d18 <.LBE220>:
+  while (value);
+    1d18:	c3a1                	beqz	a5,1d58 <.L814>
+
+00001d1a <.LBB221>:
+      char c = '0' + (value % 10);
+    1d1a:	03c7ea33          	rem	s4,a5,t3
+    1d1e:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1d20:	00c10a93          	addi	s5,sp,12
+
+00001d24 <.LVL356>:
+    1d24:	00690713          	addi	a4,s2,6
+
+00001d28 <.LVL357>:
+    1d28:	9aba                	add	s5,s5,a4
+
+00001d2a <.LVL358>:
+      value = value / 10;
+    1d2a:	03c7c7b3          	div	a5,a5,t3
+
+00001d2e <.LVL359>:
+      char c = '0' + (value % 10);
+    1d2e:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1d32:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001d36 <.LBE221>:
+  while (value);
+    1d36:	c38d                	beqz	a5,1d58 <.L814>
+
+00001d38 <.LBB222>:
+      char c = '0' + (value % 10);
+    1d38:	03c7ea33          	rem	s4,a5,t3
+    1d3c:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1d3e:	00790713          	addi	a4,s2,7
+
+00001d42 <.LVL361>:
+    1d42:	00c10913          	addi	s2,sp,12
+
+00001d46 <.LVL362>:
+    1d46:	00e90ab3          	add	s5,s2,a4
+      value = value / 10;
+    1d4a:	03c7c7b3          	div	a5,a5,t3
+
+00001d4e <.LVL363>:
+      char c = '0' + (value % 10);
+    1d4e:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1d52:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001d56 <.LBE222>:
+  while (value);
+    1d56:	fb81                	bnez	a5,1c66 <.L582>
+
+00001d58 <.L814>:
+  char* p = buffer + charCount - 1;
+    1d58:	00c10913          	addi	s2,sp,12
+    1d5c:	009907b3          	add	a5,s2,s1
+
+00001d60 <.LBB223>:
+  for (unsigned i = 0; i < charCount; ++i)
+    1d60:	41e78ab3          	sub	s5,a5,t5
+    1d64:	007af913          	andi	s2,s5,7
+    1d68:	06090963          	beqz	s2,1dda <.L583>
+    1d6c:	4a05                	li	s4,1
+    1d6e:	05490f63          	beq	s2,s4,1dcc <.L748>
+    1d72:	4a89                	li	s5,2
+    1d74:	05590763          	beq	s2,s5,1dc2 <.L749>
+    1d78:	4a0d                	li	s4,3
+    1d7a:	03490f63          	beq	s2,s4,1db8 <.L750>
+    1d7e:	4a91                	li	s5,4
+    1d80:	03590763          	beq	s2,s5,1dae <.L751>
+    1d84:	4a15                	li	s4,5
+    1d86:	01490f63          	beq	s2,s4,1da4 <.L752>
+    1d8a:	4a99                	li	s5,6
+    1d8c:	01590763          	beq	s2,s5,1d9a <.L753>
+
+00001d90 <.LVL366>:
+    whisperPutc(*p--);
+    1d90:	0007c903          	lbu	s2,0(a5)
+    1d94:	17fd                	addi	a5,a5,-1
+
+00001d96 <.LBB224>:
+  *(volatile char*)(STDOUT) = c;
+    1d96:	01280023          	sb	s2,0(a6)
+
+00001d9a <.L753>:
+    whisperPutc(*p--);
+    1d9a:	0007ca03          	lbu	s4,0(a5)
+    1d9e:	17fd                	addi	a5,a5,-1
+
+00001da0 <.LBB241>:
+  *(volatile char*)(STDOUT) = c;
+    1da0:	01480023          	sb	s4,0(a6)
+
+00001da4 <.L752>:
+    whisperPutc(*p--);
+    1da4:	0007ca83          	lbu	s5,0(a5)
+    1da8:	17fd                	addi	a5,a5,-1
+
+00001daa <.LBB242>:
+  *(volatile char*)(STDOUT) = c;
+    1daa:	01580023          	sb	s5,0(a6)
+
+00001dae <.L751>:
+    whisperPutc(*p--);
+    1dae:	0007c903          	lbu	s2,0(a5)
+    1db2:	17fd                	addi	a5,a5,-1
+
+00001db4 <.LBB243>:
+  *(volatile char*)(STDOUT) = c;
+    1db4:	01280023          	sb	s2,0(a6)
+
+00001db8 <.L750>:
+    whisperPutc(*p--);
+    1db8:	0007ca03          	lbu	s4,0(a5)
+    1dbc:	17fd                	addi	a5,a5,-1
+
+00001dbe <.LBB244>:
+  *(volatile char*)(STDOUT) = c;
+    1dbe:	01480023          	sb	s4,0(a6)
+
+00001dc2 <.L749>:
+    whisperPutc(*p--);
+    1dc2:	0007ca83          	lbu	s5,0(a5)
+    1dc6:	17fd                	addi	a5,a5,-1
+
+00001dc8 <.LBB245>:
+  *(volatile char*)(STDOUT) = c;
+    1dc8:	01580023          	sb	s5,0(a6)
+
+00001dcc <.L748>:
+    whisperPutc(*p--);
+    1dcc:	0007c903          	lbu	s2,0(a5)
+    1dd0:	17fd                	addi	a5,a5,-1
+
+00001dd2 <.LBB246>:
+  *(volatile char*)(STDOUT) = c;
+    1dd2:	01280023          	sb	s2,0(a6)
+
+00001dd6 <.LBE246>:
+  for (unsigned i = 0; i < charCount; ++i)
+    1dd6:	05e78563          	beq	a5,t5,1e20 <.L813>
+
+00001dda <.L583>:
+    whisperPutc(*p--);
+    1dda:	0007ca03          	lbu	s4,0(a5)
+
+00001dde <.LBB247>:
+    1dde:	17e1                	addi	a5,a5,-8
+
+00001de0 <.LBB248>:
+  *(volatile char*)(STDOUT) = c;
+    1de0:	01480023          	sb	s4,0(a6)
+
+00001de4 <.LBE248>:
+    whisperPutc(*p--);
+    1de4:	0077ca83          	lbu	s5,7(a5)
+
+00001de8 <.LBB249>:
+  *(volatile char*)(STDOUT) = c;
+    1de8:	01580023          	sb	s5,0(a6)
+
+00001dec <.LBE249>:
+    whisperPutc(*p--);
+    1dec:	0067c903          	lbu	s2,6(a5)
+
+00001df0 <.LBB250>:
+  *(volatile char*)(STDOUT) = c;
+    1df0:	01280023          	sb	s2,0(a6)
+
+00001df4 <.LBE250>:
+    whisperPutc(*p--);
+    1df4:	0057ca03          	lbu	s4,5(a5)
+
+00001df8 <.LBB251>:
+  *(volatile char*)(STDOUT) = c;
+    1df8:	01480023          	sb	s4,0(a6)
+
+00001dfc <.LBE251>:
+    whisperPutc(*p--);
+    1dfc:	0047ca83          	lbu	s5,4(a5)
+
+00001e00 <.LBB252>:
+  *(volatile char*)(STDOUT) = c;
+    1e00:	01580023          	sb	s5,0(a6)
+
+00001e04 <.LBE252>:
+    whisperPutc(*p--);
+    1e04:	0037c903          	lbu	s2,3(a5)
+
+00001e08 <.LBB253>:
+  *(volatile char*)(STDOUT) = c;
+    1e08:	01280023          	sb	s2,0(a6)
+
+00001e0c <.LBE253>:
+    whisperPutc(*p--);
+    1e0c:	0027ca03          	lbu	s4,2(a5)
+
+00001e10 <.LBB254>:
+  *(volatile char*)(STDOUT) = c;
+    1e10:	01480023          	sb	s4,0(a6)
+
+00001e14 <.LBE254>:
+    whisperPutc(*p--);
+    1e14:	0017ca83          	lbu	s5,1(a5)
+
+00001e18 <.LBB255>:
+  *(volatile char*)(STDOUT) = c;
+    1e18:	01580023          	sb	s5,0(a6)
+
+00001e1c <.LBE255>:
+  for (unsigned i = 0; i < charCount; ++i)
+    1e1c:	fbe79fe3          	bne	a5,t5,1dda <.L583>
+
+00001e20 <.L813>:
+  if (neg)
+    1e20:	e209dae3          	bgez	s3,1c54 <.L808>
+    charCount++;
+    1e24:	00248713          	addi	a4,s1,2
+
+00001e28 <.LBE271>:
+          count += whisperPrintInt(va_arg(ap, int), 16);
+    1e28:	953a                	add	a0,a0,a4
+          break;
+    1e2a:	be41                	j	19ba <.L562>
+
+00001e2c <.L573>:
+          count += whisperPuts(va_arg(ap, char*));
+    1e2c:	419c                	lw	a5,0(a1)
+    1e2e:	0591                	addi	a1,a1,4
+
+00001e30 <.LBB272>:
+  while (*s)
+    1e30:	0007c483          	lbu	s1,0(a5)
+    1e34:	ccb9                	beqz	s1,1e92 <.L592>
+
+00001e36 <.L591>:
+  *(volatile char*)(STDOUT) = c;
+    1e36:	00980023          	sb	s1,0(a6)
+
+00001e3a <.LBE163>:
+  while (*s)
+    1e3a:	0017c983          	lbu	s3,1(a5)
+    1e3e:	04098a63          	beqz	s3,1e92 <.L592>
+
+00001e42 <.LBB164>:
+  *(volatile char*)(STDOUT) = c;
+    1e42:	01380023          	sb	s3,0(a6)
+
+00001e46 <.LBE164>:
+  while (*s)
+    1e46:	0027c483          	lbu	s1,2(a5)
+    1e4a:	c4a1                	beqz	s1,1e92 <.L592>
+
+00001e4c <.LBB165>:
+  *(volatile char*)(STDOUT) = c;
+    1e4c:	00980023          	sb	s1,0(a6)
+
+00001e50 <.LBE165>:
+  while (*s)
+    1e50:	0037c703          	lbu	a4,3(a5)
+    1e54:	cf1d                	beqz	a4,1e92 <.L592>
+
+00001e56 <.LBB166>:
+  *(volatile char*)(STDOUT) = c;
+    1e56:	00e80023          	sb	a4,0(a6)
+
+00001e5a <.LBE166>:
+  while (*s)
+    1e5a:	0047c903          	lbu	s2,4(a5)
+    1e5e:	02090a63          	beqz	s2,1e92 <.L592>
+
+00001e62 <.LBB167>:
+  *(volatile char*)(STDOUT) = c;
+    1e62:	01280023          	sb	s2,0(a6)
+
+00001e66 <.LBE167>:
+  while (*s)
+    1e66:	0057ca03          	lbu	s4,5(a5)
+    1e6a:	020a0463          	beqz	s4,1e92 <.L592>
+
+00001e6e <.LBB168>:
+  *(volatile char*)(STDOUT) = c;
+    1e6e:	01480023          	sb	s4,0(a6)
+
+00001e72 <.LBE168>:
+  while (*s)
+    1e72:	0067ca83          	lbu	s5,6(a5)
+    1e76:	000a8e63          	beqz	s5,1e92 <.L592>
+
+00001e7a <.LBB169>:
+  *(volatile char*)(STDOUT) = c;
+    1e7a:	01580023          	sb	s5,0(a6)
+
+00001e7e <.LBE169>:
+  while (*s)
+    1e7e:	0077c983          	lbu	s3,7(a5)
+    1e82:	00098863          	beqz	s3,1e92 <.L592>
+    whisperPutc(*s++);
+    1e86:	07a1                	addi	a5,a5,8
+
+00001e88 <.LBB170>:
+  *(volatile char*)(STDOUT) = c;
+    1e88:	01380023          	sb	s3,0(a6)
+
+00001e8c <.LBE170>:
+  while (*s)
+    1e8c:	0007c483          	lbu	s1,0(a5)
+    1e90:	f0dd                	bnez	s1,1e36 <.L591>
+
+00001e92 <.L592>:
+          count += whisperPuts(va_arg(ap, char*));
+    1e92:	0505                	addi	a0,a0,1
+          break;
+    1e94:	b61d                	j	19ba <.L562>
+
+00001e96 <.L575>:
+          count += whisperPrintDecimal(va_arg(ap, int));
+    1e96:	0005a983          	lw	s3,0(a1)
+    1e9a:	0591                	addi	a1,a1,4
+
+00001e9c <.LBB273>:
+  if (neg)
+    1e9c:	87ce                	mv	a5,s3
+    1e9e:	3a09c563          	bltz	s3,2248 <.L828>
+
+00001ea2 <.L577>:
+    1ea2:	4701                	li	a4,0
+
+00001ea4 <.L578>:
+      char c = '0' + (value % 10);
+    1ea4:	03c7ea33          	rem	s4,a5,t3
+    1ea8:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1eaa:	00c10a93          	addi	s5,sp,12
+    1eae:	0705                	addi	a4,a4,1
+
+00001eb0 <.LVL399>:
+    1eb0:	9aba                	add	s5,s5,a4
+    1eb2:	893a                	mv	s2,a4
+      value = value / 10;
+    1eb4:	03c7c7b3          	div	a5,a5,t3
+
+00001eb8 <.LVL400>:
+      char c = '0' + (value % 10);
+    1eb8:	030a0a13          	addi	s4,s4,48
+
+00001ebc <.LVL401>:
+      buffer[charCount++] = c;
+    1ebc:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001ec0 <.LBE275>:
+  while (value);
+    1ec0:	cbf1                	beqz	a5,1f94 <.L810>
+
+00001ec2 <.LBB276>:
+      char c = '0' + (value % 10);
+    1ec2:	03c7ea33          	rem	s4,a5,t3
+
+00001ec6 <.LVL402>:
+    1ec6:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1ec8:	00c10a93          	addi	s5,sp,12
+
+00001ecc <.LVL403>:
+    1ecc:	0705                	addi	a4,a4,1
+
+00001ece <.LVL404>:
+    1ece:	9aba                	add	s5,s5,a4
+
+00001ed0 <.LVL405>:
+      value = value / 10;
+    1ed0:	03c7c7b3          	div	a5,a5,t3
+
+00001ed4 <.LVL406>:
+      char c = '0' + (value % 10);
+    1ed4:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1ed8:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001edc <.LBE276>:
+  while (value);
+    1edc:	cfc5                	beqz	a5,1f94 <.L810>
+
+00001ede <.LBB277>:
+      char c = '0' + (value % 10);
+    1ede:	03c7ea33          	rem	s4,a5,t3
+    1ee2:	84ba                	mv	s1,a4
+
+00001ee4 <.LVL407>:
+      buffer[charCount++] = c;
+    1ee4:	00c10a93          	addi	s5,sp,12
+
+00001ee8 <.LVL408>:
+    1ee8:	00290713          	addi	a4,s2,2
+
+00001eec <.LVL409>:
+    1eec:	9aba                	add	s5,s5,a4
+
+00001eee <.LVL410>:
+      value = value / 10;
+    1eee:	03c7c7b3          	div	a5,a5,t3
+
+00001ef2 <.LVL411>:
+      char c = '0' + (value % 10);
+    1ef2:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1ef6:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001efa <.LBE277>:
+  while (value);
+    1efa:	cfc9                	beqz	a5,1f94 <.L810>
+
+00001efc <.LBB278>:
+      char c = '0' + (value % 10);
+    1efc:	03c7ea33          	rem	s4,a5,t3
+    1f00:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1f02:	00c10a93          	addi	s5,sp,12
+
+00001f06 <.LVL412>:
+    1f06:	00390713          	addi	a4,s2,3
+
+00001f0a <.LVL413>:
+    1f0a:	9aba                	add	s5,s5,a4
+
+00001f0c <.LVL414>:
+      value = value / 10;
+    1f0c:	03c7c7b3          	div	a5,a5,t3
+
+00001f10 <.LVL415>:
+      char c = '0' + (value % 10);
+    1f10:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1f14:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001f18 <.LBE278>:
+  while (value);
+    1f18:	cfb5                	beqz	a5,1f94 <.L810>
+
+00001f1a <.LBB279>:
+      char c = '0' + (value % 10);
+    1f1a:	03c7ea33          	rem	s4,a5,t3
+    1f1e:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1f20:	00c10a93          	addi	s5,sp,12
+
+00001f24 <.LVL416>:
+    1f24:	00490713          	addi	a4,s2,4
+
+00001f28 <.LVL417>:
+    1f28:	9aba                	add	s5,s5,a4
+
+00001f2a <.LVL418>:
+      value = value / 10;
+    1f2a:	03c7c7b3          	div	a5,a5,t3
+
+00001f2e <.LVL419>:
+      char c = '0' + (value % 10);
+    1f2e:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1f32:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001f36 <.LBE279>:
+  while (value);
+    1f36:	cfb9                	beqz	a5,1f94 <.L810>
+
+00001f38 <.LBB280>:
+      char c = '0' + (value % 10);
+    1f38:	03c7ea33          	rem	s4,a5,t3
+    1f3c:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1f3e:	00c10a93          	addi	s5,sp,12
+
+00001f42 <.LVL420>:
+    1f42:	00590713          	addi	a4,s2,5
+
+00001f46 <.LVL421>:
+    1f46:	9aba                	add	s5,s5,a4
+
+00001f48 <.LVL422>:
+      value = value / 10;
+    1f48:	03c7c7b3          	div	a5,a5,t3
+
+00001f4c <.LVL423>:
+      char c = '0' + (value % 10);
+    1f4c:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1f50:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001f54 <.LBE280>:
+  while (value);
+    1f54:	c3a1                	beqz	a5,1f94 <.L810>
+
+00001f56 <.LBB281>:
+      char c = '0' + (value % 10);
+    1f56:	03c7ea33          	rem	s4,a5,t3
+    1f5a:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1f5c:	00c10a93          	addi	s5,sp,12
+
+00001f60 <.LVL424>:
+    1f60:	00690713          	addi	a4,s2,6
+
+00001f64 <.LVL425>:
+    1f64:	9aba                	add	s5,s5,a4
+
+00001f66 <.LVL426>:
+      value = value / 10;
+    1f66:	03c7c7b3          	div	a5,a5,t3
+
+00001f6a <.LVL427>:
+      char c = '0' + (value % 10);
+    1f6a:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1f6e:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001f72 <.LBE281>:
+  while (value);
+    1f72:	c38d                	beqz	a5,1f94 <.L810>
+
+00001f74 <.LBB282>:
+      char c = '0' + (value % 10);
+    1f74:	03c7ea33          	rem	s4,a5,t3
+    1f78:	84ba                	mv	s1,a4
+      buffer[charCount++] = c;
+    1f7a:	00790713          	addi	a4,s2,7
+
+00001f7e <.LVL429>:
+    1f7e:	00c10913          	addi	s2,sp,12
+
+00001f82 <.LVL430>:
+    1f82:	00e90ab3          	add	s5,s2,a4
+      value = value / 10;
+    1f86:	03c7c7b3          	div	a5,a5,t3
+
+00001f8a <.LVL431>:
+      char c = '0' + (value % 10);
+    1f8a:	030a0a13          	addi	s4,s4,48
+      buffer[charCount++] = c;
+    1f8e:	ff4a8fa3          	sb	s4,-1(s5)
+
+00001f92 <.LBE282>:
+  while (value);
+    1f92:	fb89                	bnez	a5,1ea4 <.L578>
+
+00001f94 <.L810>:
+  char* p = buffer + charCount - 1;
+    1f94:	00c10913          	addi	s2,sp,12
+    1f98:	009907b3          	add	a5,s2,s1
+
+00001f9c <.LBB283>:
+  for (unsigned i = 0; i < charCount; ++i)
+    1f9c:	41e78ab3          	sub	s5,a5,t5
+    1fa0:	007af913          	andi	s2,s5,7
+    1fa4:	06090963          	beqz	s2,2016 <.L579>
+    1fa8:	4a05                	li	s4,1
+    1faa:	05490f63          	beq	s2,s4,2008 <.L741>
+    1fae:	4a89                	li	s5,2
+    1fb0:	05590763          	beq	s2,s5,1ffe <.L742>
+    1fb4:	4a0d                	li	s4,3
+    1fb6:	03490f63          	beq	s2,s4,1ff4 <.L743>
+    1fba:	4a91                	li	s5,4
+    1fbc:	03590763          	beq	s2,s5,1fea <.L744>
+    1fc0:	4a15                	li	s4,5
+    1fc2:	01490f63          	beq	s2,s4,1fe0 <.L745>
+    1fc6:	4a99                	li	s5,6
+    1fc8:	01590763          	beq	s2,s5,1fd6 <.L746>
+
+00001fcc <.LVL434>:
+    whisperPutc(*p--);
+    1fcc:	0007c903          	lbu	s2,0(a5)
+    1fd0:	17fd                	addi	a5,a5,-1
+
+00001fd2 <.LBB284>:
+  *(volatile char*)(STDOUT) = c;
+    1fd2:	01280023          	sb	s2,0(a6)
+
+00001fd6 <.L746>:
+    whisperPutc(*p--);
+    1fd6:	0007ca03          	lbu	s4,0(a5)
+    1fda:	17fd                	addi	a5,a5,-1
+
+00001fdc <.LBB301>:
+  *(volatile char*)(STDOUT) = c;
+    1fdc:	01480023          	sb	s4,0(a6)
+
+00001fe0 <.L745>:
+    whisperPutc(*p--);
+    1fe0:	0007ca83          	lbu	s5,0(a5)
+    1fe4:	17fd                	addi	a5,a5,-1
+
+00001fe6 <.LBB302>:
+  *(volatile char*)(STDOUT) = c;
+    1fe6:	01580023          	sb	s5,0(a6)
+
+00001fea <.L744>:
+    whisperPutc(*p--);
+    1fea:	0007c903          	lbu	s2,0(a5)
+    1fee:	17fd                	addi	a5,a5,-1
+
+00001ff0 <.LBB303>:
+  *(volatile char*)(STDOUT) = c;
+    1ff0:	01280023          	sb	s2,0(a6)
+
+00001ff4 <.L743>:
+    whisperPutc(*p--);
+    1ff4:	0007ca03          	lbu	s4,0(a5)
+    1ff8:	17fd                	addi	a5,a5,-1
+
+00001ffa <.LBB304>:
+  *(volatile char*)(STDOUT) = c;
+    1ffa:	01480023          	sb	s4,0(a6)
+
+00001ffe <.L742>:
+    whisperPutc(*p--);
+    1ffe:	0007ca83          	lbu	s5,0(a5)
+    2002:	17fd                	addi	a5,a5,-1
+
+00002004 <.LBB305>:
+  *(volatile char*)(STDOUT) = c;
+    2004:	01580023          	sb	s5,0(a6)
+
+00002008 <.L741>:
+    whisperPutc(*p--);
+    2008:	0007c903          	lbu	s2,0(a5)
+    200c:	17fd                	addi	a5,a5,-1
+
+0000200e <.LBB306>:
+  *(volatile char*)(STDOUT) = c;
+    200e:	01280023          	sb	s2,0(a6)
+
+00002012 <.LBE306>:
+  for (unsigned i = 0; i < charCount; ++i)
+    2012:	e1e787e3          	beq	a5,t5,1e20 <.L813>
+
+00002016 <.L579>:
+    whisperPutc(*p--);
+    2016:	0007ca03          	lbu	s4,0(a5)
+
+0000201a <.LBB307>:
+    201a:	17e1                	addi	a5,a5,-8
+
+0000201c <.LBB308>:
+  *(volatile char*)(STDOUT) = c;
+    201c:	01480023          	sb	s4,0(a6)
+
+00002020 <.LBE308>:
+    whisperPutc(*p--);
+    2020:	0077ca83          	lbu	s5,7(a5)
+
+00002024 <.LBB309>:
+  *(volatile char*)(STDOUT) = c;
+    2024:	01580023          	sb	s5,0(a6)
+
+00002028 <.LBE309>:
+    whisperPutc(*p--);
+    2028:	0067c903          	lbu	s2,6(a5)
+
+0000202c <.LBB310>:
+  *(volatile char*)(STDOUT) = c;
+    202c:	01280023          	sb	s2,0(a6)
+
+00002030 <.LBE310>:
+    whisperPutc(*p--);
+    2030:	0057ca03          	lbu	s4,5(a5)
+
+00002034 <.LBB311>:
+  *(volatile char*)(STDOUT) = c;
+    2034:	01480023          	sb	s4,0(a6)
+
+00002038 <.LBE311>:
+    whisperPutc(*p--);
+    2038:	0047ca83          	lbu	s5,4(a5)
+
+0000203c <.LBB312>:
+  *(volatile char*)(STDOUT) = c;
+    203c:	01580023          	sb	s5,0(a6)
+
+00002040 <.LBE312>:
+    whisperPutc(*p--);
+    2040:	0037c903          	lbu	s2,3(a5)
+
+00002044 <.LBB313>:
+  *(volatile char*)(STDOUT) = c;
+    2044:	01280023          	sb	s2,0(a6)
+
+00002048 <.LBE313>:
+    whisperPutc(*p--);
+    2048:	0027ca03          	lbu	s4,2(a5)
+
+0000204c <.LBB314>:
+  *(volatile char*)(STDOUT) = c;
+    204c:	01480023          	sb	s4,0(a6)
+
+00002050 <.LBE314>:
+    whisperPutc(*p--);
+    2050:	0017ca83          	lbu	s5,1(a5)
+
+00002054 <.LBB315>:
+  *(volatile char*)(STDOUT) = c;
+    2054:	01580023          	sb	s5,0(a6)
+
+00002058 <.LBE315>:
+  for (unsigned i = 0; i < charCount; ++i)
+    2058:	fbe79fe3          	bne	a5,t5,2016 <.L579>
+    205c:	b3d1                	j	1e20 <.L813>
+
+0000205e <.L574>:
+  unsigned uu = value;
+    205e:	4184                	lw	s1,0(a1)
+  int charCount = 0;
+    2060:	4781                	li	a5,0
+
+00002062 <.LBE319>:
+          count += whisperPrintInt(va_arg(ap, int), 8);
+    2062:	0591                	addi	a1,a1,4
+
+00002064 <.L589>:
+          char c = '0' + (uu & 7);
+    2064:	0074f913          	andi	s2,s1,7
+    2068:	873e                	mv	a4,a5
+          buffer[charCount++] = c;
+    206a:	00c10a13          	addi	s4,sp,12
+    206e:	0785                	addi	a5,a5,1
+
+00002070 <.LVL458>:
+    2070:	00fa0ab3          	add	s5,s4,a5
+          char c = '0' + (uu & 7);
+    2074:	03090993          	addi	s3,s2,48
+          buffer[charCount++] = c;
+    2078:	ff3a8fa3          	sb	s3,-1(s5)
+          uu >>= 3;
+    207c:	0034d913          	srli	s2,s1,0x3
+          buffer[charCount++] = c;
+    2080:	8abe                	mv	s5,a5
+
+00002082 <.LBE321>:
+      while (uu);
+    2082:	0e090563          	beqz	s2,216c <.L812>
+
+00002086 <.LBB322>:
+          char c = '0' + (uu & 7);
+    2086:	00797993          	andi	s3,s2,7
+    208a:	873e                	mv	a4,a5
+          buffer[charCount++] = c;
+    208c:	00c10a13          	addi	s4,sp,12
+    2090:	0785                	addi	a5,a5,1
+          char c = '0' + (uu & 7);
+    2092:	03098913          	addi	s2,s3,48
+          buffer[charCount++] = c;
+    2096:	9a3e                	add	s4,s4,a5
+    2098:	ff2a0fa3          	sb	s2,-1(s4)
+          uu >>= 3;
+    209c:	0064d993          	srli	s3,s1,0x6
+
+000020a0 <.LBE322>:
+      while (uu);
+    20a0:	0c098663          	beqz	s3,216c <.L812>
+
+000020a4 <.LBB323>:
+          char c = '0' + (uu & 7);
+    20a4:	0079f913          	andi	s2,s3,7
+          buffer[charCount++] = c;
+    20a8:	00c10a13          	addi	s4,sp,12
+    20ac:	873e                	mv	a4,a5
+    20ae:	002a8793          	addi	a5,s5,2
+    20b2:	00fa09b3          	add	s3,s4,a5
+          char c = '0' + (uu & 7);
+    20b6:	03090913          	addi	s2,s2,48
+          buffer[charCount++] = c;
+    20ba:	ff298fa3          	sb	s2,-1(s3)
+          uu >>= 3;
+    20be:	0094da13          	srli	s4,s1,0x9
+
+000020c2 <.LBE323>:
+      while (uu);
+    20c2:	0a0a0563          	beqz	s4,216c <.L812>
+
+000020c6 <.LBB324>:
+          char c = '0' + (uu & 7);
+    20c6:	007a7993          	andi	s3,s4,7
+          buffer[charCount++] = c;
+    20ca:	00c10913          	addi	s2,sp,12
+    20ce:	873e                	mv	a4,a5
+    20d0:	003a8793          	addi	a5,s5,3
+    20d4:	00f90a33          	add	s4,s2,a5
+          char c = '0' + (uu & 7);
+    20d8:	03098993          	addi	s3,s3,48
+          buffer[charCount++] = c;
+    20dc:	ff3a0fa3          	sb	s3,-1(s4)
+          uu >>= 3;
+    20e0:	00c4d913          	srli	s2,s1,0xc
+
+000020e4 <.LBE324>:
+      while (uu);
+    20e4:	08090463          	beqz	s2,216c <.L812>
+
+000020e8 <.LBB325>:
+          char c = '0' + (uu & 7);
+    20e8:	00797993          	andi	s3,s2,7
+    20ec:	873e                	mv	a4,a5
+          buffer[charCount++] = c;
+    20ee:	00c10a13          	addi	s4,sp,12
+    20f2:	004a8793          	addi	a5,s5,4
+          char c = '0' + (uu & 7);
+    20f6:	03098913          	addi	s2,s3,48
+          buffer[charCount++] = c;
+    20fa:	9a3e                	add	s4,s4,a5
+    20fc:	ff2a0fa3          	sb	s2,-1(s4)
+          uu >>= 3;
+    2100:	00f4d993          	srli	s3,s1,0xf
+
+00002104 <.LBE325>:
+      while (uu);
+    2104:	06098463          	beqz	s3,216c <.L812>
+
+00002108 <.LBB326>:
+          char c = '0' + (uu & 7);
+    2108:	0079f913          	andi	s2,s3,7
+          buffer[charCount++] = c;
+    210c:	00c10a13          	addi	s4,sp,12
+    2110:	873e                	mv	a4,a5
+    2112:	005a8793          	addi	a5,s5,5
+    2116:	00fa09b3          	add	s3,s4,a5
+          char c = '0' + (uu & 7);
+    211a:	03090913          	addi	s2,s2,48
+          buffer[charCount++] = c;
+    211e:	ff298fa3          	sb	s2,-1(s3)
+          uu >>= 3;
+    2122:	0124da13          	srli	s4,s1,0x12
+
+00002126 <.LBE326>:
+      while (uu);
+    2126:	040a0363          	beqz	s4,216c <.L812>
+
+0000212a <.LBB327>:
+          char c = '0' + (uu & 7);
+    212a:	007a7993          	andi	s3,s4,7
+          buffer[charCount++] = c;
+    212e:	00c10913          	addi	s2,sp,12
+    2132:	873e                	mv	a4,a5
+    2134:	006a8793          	addi	a5,s5,6
+    2138:	00f90a33          	add	s4,s2,a5
+          char c = '0' + (uu & 7);
+    213c:	03098993          	addi	s3,s3,48
+          buffer[charCount++] = c;
+    2140:	ff3a0fa3          	sb	s3,-1(s4)
+          uu >>= 3;
+    2144:	0154d913          	srli	s2,s1,0x15
+
+00002148 <.LBE327>:
+      while (uu);
+    2148:	02090263          	beqz	s2,216c <.L812>
+
+0000214c <.LBB328>:
+          buffer[charCount++] = c;
+    214c:	873e                	mv	a4,a5
+          char c = '0' + (uu & 7);
+    214e:	00797a13          	andi	s4,s2,7
+          buffer[charCount++] = c;
+    2152:	007a8793          	addi	a5,s5,7
+    2156:	00c10a93          	addi	s5,sp,12
+    215a:	00fa89b3          	add	s3,s5,a5
+          char c = '0' + (uu & 7);
+    215e:	030a0913          	addi	s2,s4,48
+          buffer[charCount++] = c;
+    2162:	ff298fa3          	sb	s2,-1(s3)
+
+00002166 <.LVL467>:
+          uu >>= 3;
+    2166:	80e1                	srli	s1,s1,0x18
+
+00002168 <.LBE328>:
+      while (uu);
+    2168:	ee049ee3          	bnez	s1,2064 <.L589>
+
+0000216c <.L812>:
+  char* p = buffer + charCount - 1;
+    216c:	00c10a13          	addi	s4,sp,12
+    2170:	9752                	add	a4,a4,s4
+
+00002172 <.LBB329>:
+  for (unsigned i = 0; i < charCount; ++i)
+    2172:	41e70ab3          	sub	s5,a4,t5
+    2176:	007af993          	andi	s3,s5,7
+    217a:	06098963          	beqz	s3,21ec <.L590>
+    217e:	4905                	li	s2,1
+    2180:	05298f63          	beq	s3,s2,21de <.L761>
+    2184:	4489                	li	s1,2
+    2186:	04998763          	beq	s3,s1,21d4 <.L762>
+    218a:	4a0d                	li	s4,3
+    218c:	03498f63          	beq	s3,s4,21ca <.L763>
+    2190:	4a91                	li	s5,4
+    2192:	03598763          	beq	s3,s5,21c0 <.L764>
+    2196:	4915                	li	s2,5
+    2198:	01298f63          	beq	s3,s2,21b6 <.L765>
+    219c:	4499                	li	s1,6
+    219e:	00998763          	beq	s3,s1,21ac <.L766>
+
+000021a2 <.LVL470>:
+    whisperPutc(*p--);
+    21a2:	00074983          	lbu	s3,0(a4)
+    21a6:	177d                	addi	a4,a4,-1
+
+000021a8 <.LBB330>:
+  *(volatile char*)(STDOUT) = c;
+    21a8:	01380023          	sb	s3,0(a6)
+
+000021ac <.L766>:
+    whisperPutc(*p--);
+    21ac:	00074a03          	lbu	s4,0(a4)
+    21b0:	177d                	addi	a4,a4,-1
+
+000021b2 <.LBB347>:
+  *(volatile char*)(STDOUT) = c;
+    21b2:	01480023          	sb	s4,0(a6)
+
+000021b6 <.L765>:
+    whisperPutc(*p--);
+    21b6:	00074a83          	lbu	s5,0(a4)
+    21ba:	177d                	addi	a4,a4,-1
+
+000021bc <.LBB348>:
+  *(volatile char*)(STDOUT) = c;
+    21bc:	01580023          	sb	s5,0(a6)
+
+000021c0 <.L764>:
+    whisperPutc(*p--);
+    21c0:	00074903          	lbu	s2,0(a4)
+    21c4:	177d                	addi	a4,a4,-1
+
+000021c6 <.LBB349>:
+  *(volatile char*)(STDOUT) = c;
+    21c6:	01280023          	sb	s2,0(a6)
+
+000021ca <.L763>:
+    whisperPutc(*p--);
+    21ca:	00074483          	lbu	s1,0(a4)
+    21ce:	177d                	addi	a4,a4,-1
+
+000021d0 <.LBB350>:
+  *(volatile char*)(STDOUT) = c;
+    21d0:	00980023          	sb	s1,0(a6)
+
+000021d4 <.L762>:
+    whisperPutc(*p--);
+    21d4:	00074983          	lbu	s3,0(a4)
+    21d8:	177d                	addi	a4,a4,-1
+
+000021da <.LBB351>:
+  *(volatile char*)(STDOUT) = c;
+    21da:	01380023          	sb	s3,0(a6)
+
+000021de <.L761>:
+    whisperPutc(*p--);
+    21de:	00074a03          	lbu	s4,0(a4)
+    21e2:	177d                	addi	a4,a4,-1
+
+000021e4 <.LBB352>:
+  *(volatile char*)(STDOUT) = c;
+    21e4:	01480023          	sb	s4,0(a6)
+
+000021e8 <.LBE352>:
+  for (unsigned i = 0; i < charCount; ++i)
+    21e8:	05e70563          	beq	a4,t5,2232 <.L811>
+
+000021ec <.L590>:
+    whisperPutc(*p--);
+    21ec:	00074a83          	lbu	s5,0(a4)
+
+000021f0 <.LBB353>:
+    21f0:	1761                	addi	a4,a4,-8
+
+000021f2 <.LBB354>:
+  *(volatile char*)(STDOUT) = c;
+    21f2:	01580023          	sb	s5,0(a6)
+
+000021f6 <.LBE354>:
+    whisperPutc(*p--);
+    21f6:	00774903          	lbu	s2,7(a4)
+
+000021fa <.LBB355>:
+  *(volatile char*)(STDOUT) = c;
+    21fa:	01280023          	sb	s2,0(a6)
+
+000021fe <.LBE355>:
+    whisperPutc(*p--);
+    21fe:	00674483          	lbu	s1,6(a4)
+
+00002202 <.LBB356>:
+  *(volatile char*)(STDOUT) = c;
+    2202:	00980023          	sb	s1,0(a6)
+
+00002206 <.LBE356>:
+    whisperPutc(*p--);
+    2206:	00574983          	lbu	s3,5(a4)
+
+0000220a <.LBB357>:
+  *(volatile char*)(STDOUT) = c;
+    220a:	01380023          	sb	s3,0(a6)
+
+0000220e <.LBE357>:
+    whisperPutc(*p--);
+    220e:	00474a03          	lbu	s4,4(a4)
+
+00002212 <.LBB358>:
+  *(volatile char*)(STDOUT) = c;
+    2212:	01480023          	sb	s4,0(a6)
+
+00002216 <.LBE358>:
+    whisperPutc(*p--);
+    2216:	00374a83          	lbu	s5,3(a4)
+
+0000221a <.LBB359>:
+  *(volatile char*)(STDOUT) = c;
+    221a:	01580023          	sb	s5,0(a6)
+
+0000221e <.LBE359>:
+    whisperPutc(*p--);
+    221e:	00274903          	lbu	s2,2(a4)
+
+00002222 <.LBB360>:
+  *(volatile char*)(STDOUT) = c;
+    2222:	01280023          	sb	s2,0(a6)
+
+00002226 <.LBE360>:
+    whisperPutc(*p--);
+    2226:	00174483          	lbu	s1,1(a4)
+
+0000222a <.LBB361>:
+  *(volatile char*)(STDOUT) = c;
+    222a:	00980023          	sb	s1,0(a6)
+
+0000222e <.LBE361>:
+  for (unsigned i = 0; i < charCount; ++i)
+    222e:	fbe71fe3          	bne	a4,t5,21ec <.L590>
+
+00002232 <.L811>:
+          count += whisperPrintInt(va_arg(ap, int), 8);
+    2232:	953e                	add	a0,a0,a5
+          break;
+    2234:	f86ff06f          	j	19ba <.L562>
+
+00002238 <.L576>:
+          whisperPutc(va_arg(ap, int));
+    2238:	0005c703          	lbu	a4,0(a1)
+
+0000223c <.LBB364>:
+          ++count;
+    223c:	0505                	addi	a0,a0,1
+
+0000223e <.LVL500>:
+          whisperPutc(va_arg(ap, int));
+    223e:	0591                	addi	a1,a1,4
+
+00002240 <.LBB367>:
+  *(volatile char*)(STDOUT) = c;
+    2240:	00e80023          	sb	a4,0(a6)
+
+00002244 <.LBE367>:
+          break;
+    2244:	f76ff06f          	j	19ba <.L562>
+
+00002248 <.L828>:
+      value = -value;
+    2248:	413007b3          	neg	a5,s3
+
+0000224c <.LBB316>:
+  *(volatile char*)(STDOUT) = c;
+    224c:	00580023          	sb	t0,0(a6)
+  return c;
+    2250:	b989                	j	1ea2 <.L577>
+
+00002252 <.L827>:
+      value = -value;
+    2252:	413007b3          	neg	a5,s3
+
+00002256 <.LBB256>:
+  *(volatile char*)(STDOUT) = c;
+    2256:	00580023          	sb	t0,0(a6)
+  return c;
+    225a:	b429                	j	1c64 <.L581>
+
+0000225c <.L825>:
+          while (*fp >= '0' && *fp <= '9')
+    225c:	863a                	mv	a2,a4
+    225e:	feeff06f          	j	1a4c <.L569>
+
+00002262 <.L594>:
+  int count = 0;  // Printed character count
+    2262:	4501                	li	a0,0
+
+00002264 <.LVL509>:
+}
+    2264:	8082                	ret
+
+00002266 <whisperPrintf>:
+
+
+int
+whisperPrintf(const char* format, ...)
+{
+    2266:	7139                	addi	sp,sp,-64
+  va_list ap;
+
+  va_start(ap, format);
+    2268:	02410313          	addi	t1,sp,36
+{
+    226c:	d22e                	sw	a1,36(sp)
+  int code = whisperPrintfImpl(format, ap);
+    226e:	859a                	mv	a1,t1
+{
+    2270:	ce06                	sw	ra,28(sp)
+    2272:	d432                	sw	a2,40(sp)
+    2274:	d636                	sw	a3,44(sp)
+    2276:	d83a                	sw	a4,48(sp)
+    2278:	da3e                	sw	a5,52(sp)
+    227a:	dc42                	sw	a6,56(sp)
+    227c:	de46                	sw	a7,60(sp)
+  va_start(ap, format);
+    227e:	c61a                	sw	t1,12(sp)
+  int code = whisperPrintfImpl(format, ap);
+    2280:	eecff0ef          	jal	ra,196c <whisperPrintfImpl>
+
+00002284 <.LVL511>:
+  va_end(ap);
+
+  return code;
+}
+    2284:	40f2                	lw	ra,28(sp)
+    2286:	6121                	addi	sp,sp,64
+    2288:	8082                	ret
+
+0000228a <printf>:
+
+
+int
+printf(const char* format, ...)
+{
+    228a:	7139                	addi	sp,sp,-64
+  va_list ap;
+
+  va_start(ap, format);
+    228c:	02410313          	addi	t1,sp,36
+{
+    2290:	d22e                	sw	a1,36(sp)
+  int code = whisperPrintfImpl(format, ap);
+    2292:	859a                	mv	a1,t1
+{
+    2294:	ce06                	sw	ra,28(sp)
+    2296:	d432                	sw	a2,40(sp)
+    2298:	d636                	sw	a3,44(sp)
+    229a:	d83a                	sw	a4,48(sp)
+    229c:	da3e                	sw	a5,52(sp)
+    229e:	dc42                	sw	a6,56(sp)
+    22a0:	de46                	sw	a7,60(sp)
+  va_start(ap, format);
+    22a2:	c61a                	sw	t1,12(sp)
+  int code = whisperPrintfImpl(format, ap);
+    22a4:	ec8ff0ef          	jal	ra,196c <whisperPrintfImpl>
+
+000022a8 <.LVL518>:
+  va_end(ap);
+
+  return code;
+}
+    22a8:	40f2                	lw	ra,28(sp)
+    22aa:	6121                	addi	sp,sp,64
+    22ac:	8082                	ret
+
+000022ae <memset>:
+
+void* memset(void* s, int c, size_t n)
+{
+  asm("mv t0, a0");
+    22ae:	82aa                	mv	t0,a0
+  asm("add a2, a2, a0");  // end = s + n
+    22b0:	962a                	add	a2,a2,a0
+
+000022b2 <.memset_loop>:
+  asm(".memset_loop: bge a0, a2, .memset_end");
+    22b2:	00c55663          	bge	a0,a2,22be <.memset_end>
+  asm("sb a1, 0(a0)");
+    22b6:	00b50023          	sb	a1,0(a0)
+  asm("addi a0, a0, 1");
+    22ba:	0505                	addi	a0,a0,1
+  asm("j .memset_loop");
+    22bc:	bfdd                	j	22b2 <.memset_loop>
+
+000022be <.memset_end>:
+  asm(".memset_end:");
+  asm("mv a0, t0");
+    22be:	8516                	mv	a0,t0
+  asm("jr ra");
+    22c0:	8082                	ret
+
+000022c2 <.LVL520>:
+}
+    22c2:	8082                	ret
+
+000022c4 <main>:
+        ee_printf("hello my");
+    22c4:	6541                	lui	a0,0x10
+MAIN_RETURN_TYPE main(void) {
+    22c6:	1141                	addi	sp,sp,-16
+        ee_printf("hello my");
+    22c8:	08450513          	addi	a0,a0,132 # 10084 <.LC0>
+MAIN_RETURN_TYPE main(void) {
+    22cc:	c606                	sw	ra,12(sp)
+    22ce:	c422                	sw	s0,8(sp)
+        ee_printf("hello my");
+    22d0:	3f59                	jal	2266 <whisperPrintf>
+
+000022d2 <.LVL513>:
+        core_init_matrix(size, memblock, mat);
+    22d2:	4401                	li	s0,0
+    22d4:	65c1                	lui	a1,0x10
+    22d6:	8622                	mv	a2,s0
+    22d8:	09058593          	addi	a1,a1,144 # 10090 <static_memblk>
+    22dc:	7d000513          	li	a0,2000
+    22e0:	e4cfe0ef          	jal	ra,92c <core_init_matrix>
+
+000022e4 <.LBB372>:
+        matrix_test(N,C,A,B,val);
+    22e4:	4008                	lw	a0,0(s0)
+
+000022e6 <.LBE372>:
+}
+    22e6:	4422                	lw	s0,8(sp)
+
+000022e8 <.LVL515>:
+    22e8:	40b2                	lw	ra,12(sp)
+
+000022ea <.LBB376>:
+        matrix_test(N,C,A,B,val);
+    22ea:	00802683          	lw	a3,8(zero) # 8 <.LASF61+0x1>
+    22ee:	00402603          	lw	a2,4(zero) # 4 <_start+0x4>
+    22f2:	00c02583          	lw	a1,12(zero) # c <.LASF61+0x5>
+    22f6:	4715                	li	a4,5
+
+000022f8 <.LBE376>:
+}
+    22f8:	0141                	addi	sp,sp,16
+
+000022fa <.LBB377>:
+        matrix_test(N,C,A,B,val);
+    22fa:	d43fd06f          	j	3c <matrix_test>

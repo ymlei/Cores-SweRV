@@ -299,6 +299,7 @@ module tb_top;
     parameter MAX_CYCLES = 10_000_000;
 
     integer fd, tp, el;
+    integer read_count, write_count;
 
     always @(negedge core_clk) begin
         cycleCnt <= cycleCnt+1;
@@ -315,6 +316,7 @@ module tb_top;
         // End Of test monitor
         if(mailbox_write && WriteData[7:0] == 8'hff) begin
             $display("\nFinished : minstret = %0d, mcycle = %0d", rvtop.swerv.dec.tlu.minstretl[31:0],rvtop.swerv.dec.tlu.mcyclel[31:0]);
+            $display("Read: %d\nWrite: %d", read_count, write_count);
             $display("See \"exec.log\" for execution trace with register updates..\n");
             $display("TEST_PASSED");
             $finish;
@@ -345,6 +347,28 @@ module tb_top;
                           (wb_dest[i] !=0 && wb_valid[i]) ?  $sformatf("r%0d=%h", wb_dest[i], wb_data[i]) : "");
                end
         end
+    end
+/*
+    always @(posedge core_clk) begin
+        //$display("lsu_hwrite=%d", lsu_hwrite);
+        if (lsu_hwrite==1)
+            $display("ahb access memory %h", lsu_haddr);
+        if (lsu_axi_arvalid == 1)
+            $display("LSU AXI read channel : addr %h", lsu_axi_araddr);
+        if (sb_axi_arvalid == 1)
+            $display("SB AXI read channel : addr %h", sb_axi_araddr);
+        if(sb_hwrite==1)
+            $display("sb_haddr %h", sb_haddr);
+    end
+*/
+    always @(negedge lsu_axi_arvalid) begin
+        read_count = read_count + 1;
+        $display("LSU AXI read channel : addr %h", lsu_axi_araddr);
+    end
+
+    always @(negedge lsu_axi_awvalid) begin
+        write_count = write_count + 1;
+        $display("LSU AXI write channel : addr %h", lsu_axi_awaddr);
     end
 
 
