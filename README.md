@@ -3,6 +3,15 @@
 
 This repository contains the SweRV EH1 Core<sup>TM</sup>  design RTL
 
+7.17 update  
+1.Add memory access log.  
+  For example: https://github.com/ymlei/Cores-SweRV/blob/master/testbench/log/matrix_mem.log  
+
+2.rewrite testbench to purify code for collecting memory access information.  
+
+3.Modified tb_top.sv to show memory access.  
+  
+7.10 update  
 linked list testbench  
 matrix processing testbench  
 state machine testbench  
